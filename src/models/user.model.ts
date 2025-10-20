@@ -20,8 +20,8 @@ class User {
   @prop({ default: false })
   isAdmin!: string;
 
-  @prop({ ref: Song, type: String })
-  likedSongs!: Ref<Song>;
+  @prop({ ref: () => Song, type: () => String })
+  likedSongs!: Ref<Song>[];
 }
 
 export const UserModel = getModelForClass(User);
