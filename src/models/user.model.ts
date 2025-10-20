@@ -10,7 +10,7 @@ import { Artist } from "./artist.model.js";
 import { Playlist } from "./playlist.model.js";
 
 @modelOptions({ schemaOptions: { timestamps: true } })
-class User {
+export class User {
   @prop({ required: [true, "Name is required"], trim: true })
   name!: string;
 
