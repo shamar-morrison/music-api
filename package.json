@@ -4,7 +4,7 @@
   "description": "A RESTful API for a music streaming service, built with Node.js, Express, MongoDB and Cloudinary",
   "main": "server.js",
   "scripts": {
-    "dev": "tsx server.ts",
+    "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
     "build": "tsc && tsc-alias",
     "lint": "eslint . --ext .ts,.tsx",
