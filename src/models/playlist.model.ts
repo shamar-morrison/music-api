@@ -1,8 +1,8 @@
 import { getModelForClass, prop } from "@typegoose/typegoose";
 
 export class Playlist {
-  @prop({ required: true, trim: true })
-  name!: string;
+  @prop({ required: [true, "Playlist title is required"], trim: true })
+  title!: string;
 
   @prop({ required: true, trim: true })
   description!: string;

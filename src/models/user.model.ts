@@ -43,8 +43,6 @@ class User {
 
   @prop({ ref: () => Playlist, type: () => String })
   followedPlaylists!: Ref<Playlist>[];
-
-  // @props({timestamp: true})
 }
 
 export const UserModel = getModelForClass(User);
