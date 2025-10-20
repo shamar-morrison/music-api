@@ -1,9 +1,15 @@
-import { prop, getModelForClass, type Ref } from "@typegoose/typegoose";
+import {
+  prop,
+  getModelForClass,
+  type Ref,
+  modelOptions,
+} from "@typegoose/typegoose";
 import { Song } from "./song.model.js";
 import { Album } from "./album.model.js";
 import { Artist } from "./artists.model.js";
-import { Playlist } from "models/playlist.model.js";
+import { Playlist } from "./playlist.model.js";
 
+@modelOptions({ schemaOptions: { timestamps: true } })
 class User {
   @prop({ required: true, trim: true })
   name!: string;
