@@ -1,6 +1,6 @@
-import { prop, getModelForClass, type Ref } from "@typegoose/typegoose";
+import { getModelForClass, prop } from "@typegoose/typegoose";
 
-export class Album {
+export class Playlist {
   @prop({ required: true, trim: true })
   name!: string;
 
@@ -11,4 +11,4 @@ export class Album {
   image!: string;
 }
 
-export const AlbumModel = getModelForClass(Album);
+export const PlaylistModel = getModelForClass(Playlist);

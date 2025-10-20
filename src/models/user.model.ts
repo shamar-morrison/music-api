@@ -1,5 +1,8 @@
 import { prop, getModelForClass, type Ref } from "@typegoose/typegoose";
 import { Song } from "./song.model.js";
+import { Album } from "./album.model.js";
+import { Artist } from "./artists.model.js";
+import { Playlist } from "models/playlist.model.js";
 
 class User {
   @prop({ required: true, trim: true })
@@ -22,6 +25,17 @@ class User {
 
   @prop({ ref: () => Song, type: () => String })
   likedSongs!: Ref<Song>[];
+
+  @prop({ ref: () => Album, type: () => String })
+  likedAlbums!: Ref<Album>[];
+
+  @prop({ ref: () => Artist, type: () => String })
+  followedArtists!: Ref<Artist>[];
+
+  @prop({ ref: () => Playlist, type: () => String })
+  followedPlaylists!: Ref<Playlist>[];
+
+  // @props({timestamp: true})
 }
 
 export const UserModel = getModelForClass(User);
