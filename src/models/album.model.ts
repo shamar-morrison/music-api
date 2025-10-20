@@ -2,7 +2,7 @@ import { prop, getModelForClass, type Ref } from "@typegoose/typegoose";
 
 export class Album {
   @prop({ required: true, trim: true })
-  name!: string;
+  title!: string;
 
   @prop({ required: true, trim: true })
   description!: string;

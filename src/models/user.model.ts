@@ -11,13 +11,16 @@ import { Playlist } from "./playlist.model.js";
 
 @modelOptions({ schemaOptions: { timestamps: true } })
 class User {
-  @prop({ required: true, trim: true })
+  @prop({ required: [true, "Name is required"], trim: true })
   name!: string;
 
-  @prop({ required: true, unique: true })
+  @prop({ required: [true, "Email is required"], unique: true })
   email!: string;
 
-  @prop({ required: true, minlength: 6 })
+  @prop({
+    required: [true, "Password is required"],
+    minlength: [6, "Password has to be at least 6 characters long"],
+  })
   password!: string;
 
   @prop({
