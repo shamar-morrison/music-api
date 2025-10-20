@@ -32,16 +32,16 @@ class User {
   @prop({ default: false })
   isAdmin!: string;
 
-  @prop({ ref: () => Song, type: () => String })
+  @prop({ ref: () => Song })
   likedSongs!: Ref<Song>[];
 
-  @prop({ ref: () => Album, type: () => String })
+  @prop({ ref: () => Album })
   likedAlbums!: Ref<Album>[];
 
-  @prop({ ref: () => Artist, type: () => String })
+  @prop({ ref: () => Artist })
   followedArtists!: Ref<Artist>[];
 
-  @prop({ ref: () => Playlist, type: () => String })
+  @prop({ ref: () => Playlist })
   followedPlaylists!: Ref<Playlist>[];
 }
 

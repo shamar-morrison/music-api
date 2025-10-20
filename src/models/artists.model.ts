@@ -1,7 +1,7 @@
 import { getModelForClass, prop } from "@typegoose/typegoose";
 
 export class Artist {
-  @prop({ required: true, trim: true })
+  @prop({ required: [true, "Artist name is required"], trim: true })
   name!: string;
 
   @prop({ required: true, trim: true })

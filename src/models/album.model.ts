@@ -1,15 +1,19 @@
 import { prop, getModelForClass, type Ref } from "@typegoose/typegoose";
-import type { Artist } from "models/artists.model.js";
+import { Artist } from "./artists.model.js";
 
 export class Album {
   @prop({ required: [true, "Album Title is required"], trim: true })
   title!: string;
 
-  @prop({ required: true, trim: true })
+  @prop({
+    ref: () => Artist,
+    required: [true, "Artist is required"],
+    type: () => String,
+  })
   artist!: Ref<Artist>;
 
-  @prop({ required: true, trim: true })
-  image!: string;
+  @prop({ default: Date.now })
+  releaseDate!: Date;
 }
 
 export const AlbumModel = getModelForClass(Album);
