@@ -4,33 +4,38 @@ import {
   prop,
   type Ref,
 } from "@typegoose/typegoose";
-import { Album } from "models/album.model.js";
-import { Song } from "models/song.model.js";
+import type { Album } from "models/album.model.js";
+import type { Song } from "models/song.model.js";
 
 @modelOptions({ schemaOptions: { timestamps: true } })
 export class Artist {
-  @prop({ required: [true, "Artist name is required"], trim: true })
+  @prop({
+    required: [true, "Artist name is required"],
+    trim: true,
+    type: () => String,
+  })
   name!: string;
 
-  @prop({ trim: true })
+  @prop({ trim: true, type: () => String })
   bio!: string;
 
   @prop({
+    type: () => String,
     default:
       "https://cdn.pixabay.com/photo/2024/09/17/23/23/studio-9054709_1280.jpg",
   })
   image!: string;
 
-  @prop({ ref: () => Song })
+  @prop({ ref: "Song", type: () => String })
   genres!: Ref<Song>[];
 
-  @prop({ default: 0 })
+  @prop({ default: 0, type: () => Number })
   followers!: number;
 
-  @prop({ ref: () => Album })
+  @prop({ ref: "Album", type: () => String })
   albums!: Ref<Album>[];
 
-  @prop({ default: false })
+  @prop({ default: false, type: () => Boolean })
   isVerified!: boolean;
 }
 

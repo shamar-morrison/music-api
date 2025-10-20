@@ -4,42 +4,48 @@ import {
   type Ref,
   modelOptions,
 } from "@typegoose/typegoose";
-import { Artist } from "./artist.model.js";
-import { Song } from "models/song.model.js";
+import type { Artist } from "./artist.model.js";
+import type { Song } from "models/song.model.js";
 
 @modelOptions({ schemaOptions: { timestamps: true } })
 export class Album {
-  @prop({ required: [true, "Album Title is required"], trim: true })
+  @prop({
+    required: [true, "Album Title is required"],
+    trim: true,
+    type: () => String,
+  })
   title!: string;
 
-  @prop({ trim: true })
+  @prop({ trim: true, type: () => String })
   description!: string;
 
   @prop({
-    ref: () => Artist,
+    type: () => String,
+    ref: "Artist",
     required: [true, "Artist is required"],
   })
   artist!: Ref<Artist>;
 
-  @prop({ default: Date.now })
+  @prop({ default: Date.now, type: () => Date })
   releaseDate!: Date;
 
   @prop({
+    type: () => String,
     default:
       "https://cdn.pixabay.com/photo/2025/06/11/07/42/creepers-9653850_1280.jpg",
   })
   coverImage!: string;
 
-  @prop({ ref: () => Song })
+  @prop({ ref: "Song", type: () => String })
   songs!: Ref<Song>[];
 
-  @prop({ trim: true })
+  @prop({ trim: true, type: () => String })
   genre!: string;
 
-  @prop({ default: 0 })
+  @prop({ default: 0, type: () => Number })
   likes!: number;
 
-  @prop({ default: false })
+  @prop({ default: false, type: () => Boolean })
   isExplicit!: boolean;
 }
 
