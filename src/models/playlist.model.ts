@@ -1,5 +1,6 @@
-import { getModelForClass, prop } from "@typegoose/typegoose";
+import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose";
 
+@modelOptions({ schemaOptions: { timestamps: true } })
 export class Playlist {
   @prop({ required: [true, "Playlist title is required"], trim: true })
   title!: string;

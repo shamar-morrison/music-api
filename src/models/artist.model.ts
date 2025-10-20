@@ -1,7 +1,13 @@
-import { getModelForClass, prop, type Ref } from "@typegoose/typegoose";
+import {
+  getModelForClass,
+  modelOptions,
+  prop,
+  type Ref,
+} from "@typegoose/typegoose";
 import { Album } from "models/album.model.js";
 import { Song } from "models/song.model.js";
 
+@modelOptions({ schemaOptions: { timestamps: true } })
 export class Artist {
   @prop({ required: [true, "Artist name is required"], trim: true })
   name!: string;
