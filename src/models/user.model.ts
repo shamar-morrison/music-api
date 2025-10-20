@@ -6,7 +6,7 @@ import {
 } from "@typegoose/typegoose";
 import { Song } from "./song.model.js";
 import { Album } from "./album.model.js";
-import { Artist } from "./artists.model.js";
+import { Artist } from "./artist.model.js";
 import { Playlist } from "./playlist.model.js";
 
 @modelOptions({ schemaOptions: { timestamps: true } })
