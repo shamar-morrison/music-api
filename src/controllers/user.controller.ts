@@ -32,3 +32,25 @@ export const createUser = asyncHandler(
       });
   },
 );
+
+/**
+ * Login user
+ * @access public
+ * @route /api/users/login
+ */
+
+export const loginUser = asyncHandler(
+  async (req: Request<{}, {}, User>, res: Response) => {
+    const { email, password } = req.body;
+
+    const user = await UserModel.findOne({ email });
+    if (!user || !(await user.comparePassword(password))) {
+      res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json({ message: "Invalid credentials" });
+      return;
+    }
+    res.status(StatusCodes.OK).json({ message: "Logged In" });
+    return;
+  },
+);

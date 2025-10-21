@@ -9,7 +9,7 @@ import type { Song } from "./song.model.js";
 import type { Album } from "./album.model.js";
 import type { Artist } from "./artist.model.js";
 import type { Playlist } from "./playlist.model.js";
-import { hash } from "bcrypt";
+import bcrypt, { hash } from "bcrypt";
 
 @pre<User>("save", async function (next) {
   if (!this.isModified("password")) return;
@@ -62,6 +62,10 @@ export class User {
 
   @prop({ ref: "Playlist", type: () => String })
   followedPlaylists!: Ref<Playlist>[];
+
+  public async comparePassword(candidatePassword: string): Promise<boolean> {
+    return bcrypt.compare(candidatePassword, this.password);
+  }
 }
 
 export const UserModel = getModelForClass(User);
