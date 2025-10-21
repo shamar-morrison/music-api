@@ -8,12 +8,16 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import { userRouter } from "routes/user.routes.js";
 import { StatusCodes } from "http-status-codes";
+import { limiter } from "utils/rate-limiter";
 
 dotenv.config();
 const app = express();
 
 // Allow JSON to be parsed
 app.use(express.json());
+
+// Rate limit
+app.use(limiter);
 
 // connect to database
 mongoose
