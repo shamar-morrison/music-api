@@ -11,11 +11,12 @@ import type { Artist } from "./artist.model.js";
 import type { Playlist } from "./playlist.model.js";
 import { hash } from "bcrypt";
 
-@pre<User>("save", async function () {
+@pre<User>("save", async function (next) {
   if (!this.isModified("password")) return;
 
   const saltRounds = 12;
   this.password = await hash(this.password, saltRounds);
+  next();
 })
 @modelOptions({ schemaOptions: { timestamps: true } })
 export class User {
