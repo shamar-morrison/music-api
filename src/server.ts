@@ -1,13 +1,18 @@
 import "reflect-metadata";
-import express from "express";
+import express, {
+  type Response,
+  type Request,
+  type NextFunction,
+} from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import { userRouter } from "routes/user.routes.js";
+import { StatusCodes } from "http-status-codes";
 
 dotenv.config();
 const app = express();
 
-// Middleware
+// Allow JSON to be parsed
 app.use(express.json());
 
 // connect to database
@@ -22,6 +27,21 @@ mongoose
 
 // Routes
 app.use("/api/users", userRouter);
+
+// Error handling middleware
+// 404 errors
+app.use((_req, _res, next) => {
+  const error: any = new Error("Not Found");
+  error.status = StatusCodes.NOT_FOUND;
+  next(error);
+});
+
+// Global Error Handler
+app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
+  res
+    .status(err.status || StatusCodes.INTERNAL_SERVER_ERROR)
+    .json({ message: err.message || "Not Found", status: "error" });
+});
 
 app.listen(process.env.PORT || 5000, () => {
   console.log(`Server is running on port ${process.env.PORT || 5000}`);
