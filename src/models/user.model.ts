@@ -3,12 +3,20 @@ import {
   getModelForClass,
   type Ref,
   modelOptions,
+  pre,
 } from "@typegoose/typegoose";
 import type { Song } from "./song.model.js";
 import type { Album } from "./album.model.js";
 import type { Artist } from "./artist.model.js";
 import type { Playlist } from "./playlist.model.js";
+import { hash } from "bcrypt";
 
+@pre<User>("save", async function () {
+  if (!this.isModified("password")) return;
+
+  const saltRounds = 12;
+  this.password = await hash(this.password, saltRounds);
+})
 @modelOptions({ schemaOptions: { timestamps: true } })
 export class User {
   @prop({
