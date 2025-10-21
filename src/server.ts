@@ -7,6 +7,9 @@ import { userRouter } from "routes/user.routes.js";
 dotenv.config();
 const app = express();
 
+// Middleware
+app.use(express.json());
+
 // connect to database
 mongoose
   .connect(process.env.MONGODB_URI as string)

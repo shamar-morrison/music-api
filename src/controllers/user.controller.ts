@@ -11,12 +11,13 @@ import type { Request, Response } from "express";
 export const createUser = asyncHandler(
   async (req: Request<{}, {}, User>, res: Response) => {
     const { name, email, password } = req.body;
-
     const userExists = await UserModel.findOne({ email });
 
     if (userExists) {
-      res.status(StatusCodes.BAD_REQUEST);
-      throw new Error("User already exists");
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "User already exists" });
+      return;
     }
 
     UserModel.create({ name, email, password })
@@ -27,8 +28,7 @@ export const createUser = asyncHandler(
         });
       })
       .catch((error) => {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-        throw new Error(error.message);
+        res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
       });
   },
 );
