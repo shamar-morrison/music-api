@@ -50,7 +50,16 @@ export const loginUser = asyncHandler(
         .json({ message: "Invalid credentials" });
       return;
     }
-    res.status(StatusCodes.OK).json({ message: "Logged In" });
+    res.status(StatusCodes.OK).json({
+      message: "Successfully logged in",
+      data: {
+        _id: user._id,
+        token: "",
+        email: user.email,
+        profile_image: user.profilePicture,
+        is_admin: user.isAdmin,
+      },
+    });
     return;
   },
 );
