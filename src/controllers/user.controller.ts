@@ -99,3 +99,5 @@ export const getUserProfile = asyncHandler(async (req, res) => {
     },
   });
 });
+
+export const updateUserProfile = asyncHandler(() => {});
