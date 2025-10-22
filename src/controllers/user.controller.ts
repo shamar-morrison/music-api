@@ -16,15 +16,15 @@ export const createUser = asyncHandler(
     if (userExists) {
       res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ message: "User already exists" });
+        .json({ message: "User already exists", success: false });
       return;
     }
 
     UserModel.create({ name, email, password })
-      .then(({ email, name }) => {
+      .then(({ email, name, _id }) => {
         res.status(StatusCodes.CREATED).json({
-          message: "User created successfully",
-          user: { name, email },
+          success: true,
+          user: { _id, name, email },
         });
       })
       .catch((error) => {
@@ -47,14 +47,14 @@ export const loginUser = asyncHandler(
     if (!user || !(await user.comparePassword(password))) {
       res
         .status(StatusCodes.UNAUTHORIZED)
-        .json({ message: "Invalid credentials" });
+        .json({ message: "Invalid credentials", success: false });
       return;
     }
     res.status(StatusCodes.OK).json({
-      message: "Successfully logged in",
+      success: true,
       data: {
         _id: user._id,
-        token: "",
+        token: user.generateToken(user._id.toString()),
         email: user.email,
         profile_image: user.profilePicture,
         is_admin: user.isAdmin,

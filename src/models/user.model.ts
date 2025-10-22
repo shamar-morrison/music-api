@@ -10,6 +10,7 @@ import type { Album } from "./album.model.js";
 import type { Artist } from "./artist.model.js";
 import type { Playlist } from "./playlist.model.js";
 import bcrypt, { hash } from "bcrypt";
+import jwt from "jsonwebtoken";
 
 @pre<User>("save", async function (next) {
   if (!this.isModified("password")) return;
@@ -65,6 +66,14 @@ export class User {
 
   public async comparePassword(candidatePassword: string): Promise<boolean> {
     return bcrypt.compare(candidatePassword, this.password);
+  }
+
+  public generateToken(id: string) {
+    if (!process.env.JWT_SECRET) {
+      throw new Error("JWT env variable does not exist");
+    }
+
+    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
   }
 }
 
