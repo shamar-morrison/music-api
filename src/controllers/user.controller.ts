@@ -63,3 +63,14 @@ export const loginUser = asyncHandler(
     return;
   },
 );
+
+export const getUserProfile = asyncHandler((req, res) => {
+  if (req.user) {
+    res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({ message: "User not authenticated" });
+    return;
+  }
+
+  res.json({ user: req.user });
+});
