@@ -64,13 +64,19 @@ export const loginUser = asyncHandler(
   },
 );
 
-export const getUserProfile = asyncHandler((req, res) => {
-  if (req.user) {
+/**
+ * Get user profile
+ * @access public
+ * @route /api/users/profile
+ */
+export const getUserProfile = asyncHandler(async (req, res) => {
+  if (!req.user) {
     res
       .status(StatusCodes.UNAUTHORIZED)
       .json({ message: "User not authenticated" });
     return;
   }
 
-  res.json({ user: req.user });
+  const user = await UserModel.findById(req.user.id).select("-password");
+  res.json(user);
 });
