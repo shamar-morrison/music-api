@@ -52,16 +52,16 @@ export class User {
   @prop({ default: false, type: () => Boolean })
   isAdmin!: boolean;
 
-  @prop({ ref: "Song", type: () => Array, default: [] })
+  @prop({ ref: "Song", type: () => String })
   likedSongs!: Ref<Song>[];
 
-  @prop({ ref: "Album", type: () => Array, default: [] })
+  @prop({ ref: "Album", type: () => String })
   likedAlbums!: Ref<Album>[];
 
-  @prop({ ref: "Artist", type: () => Array, default: [] })
+  @prop({ ref: "Artist", type: () => String })
   followedArtists!: Ref<Artist>[];
 
-  @prop({ ref: "Playlist", type: () => Array, default: [] })
+  @prop({ ref: "Playlist", type: () => String })
   followedPlaylists!: Ref<Playlist>[];
 
   public async comparePassword(candidatePassword: string): Promise<boolean> {
