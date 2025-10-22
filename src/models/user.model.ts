@@ -49,8 +49,8 @@ export class User {
   })
   profilePicture!: string;
 
-  @prop({ default: false, type: () => String })
-  isAdmin!: string;
+  @prop({ default: false, type: () => Boolean })
+  isAdmin!: boolean;
 
   @prop({ ref: "Song", type: () => Array, default: [] })
   likedSongs!: Ref<Song>[];
