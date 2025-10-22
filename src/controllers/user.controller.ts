@@ -100,4 +100,42 @@ export const getUserProfile = asyncHandler(async (req, res) => {
   });
 });
 
-export const updateUserProfile = asyncHandler(() => {});
+/**
+ * Update user profile
+ * @access public
+ * @route /api/users/profile
+ */
+export const updateUserProfile = asyncHandler(
+  async (
+    req: Request<
+      {},
+      {},
+      { name: string; email: string; profilePicture: string }
+    >,
+    res,
+  ) => {
+    if (!req.user) {
+      res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json({ message: "User not authenticated" });
+      return;
+    }
+
+    const user = await UserModel.findById(req.user.id);
+    if (!user) {
+      res.status(StatusCodes.NOT_FOUND).json({ message: "User not found" });
+      return;
+    }
+
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      req.user.id,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+
+    res.json({ message: "user updated sucessfully", updatedUser });
+  },
+);

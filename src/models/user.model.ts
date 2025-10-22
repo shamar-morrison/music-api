@@ -39,6 +39,7 @@ export class User {
     required: [true, "Password is required"],
     minlength: [6, "Password has to be at least 6 characters long"],
     type: () => String,
+    select: false,
   })
   password!: string;
 
