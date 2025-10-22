@@ -77,6 +77,26 @@ export const getUserProfile = asyncHandler(async (req, res) => {
     return;
   }
 
-  const user = await UserModel.findById(req.user.id).select("-password");
-  res.json(user);
+  const user = await UserModel.findById(req.user.id)
+    .select("-password")
+    .populate("likedSongs")
+    .populate("likedAlbums")
+    .populate("followedArtists")
+    .populate("followedPlaylists")
+    .lean();
+
+  if (!user) {
+    res.status(StatusCodes.NOT_FOUND).json({ message: "User not found" });
+    return;
+  }
+
+  res.status(StatusCodes.OK).json({
+    user: {
+      ...user,
+      likedSongs: user.likedSongs || [],
+      likedAlbums: user.likedAlbums || [],
+      followedArtists: user.followedArtists || [],
+      followedPlaylists: user.followedPlaylists || [],
+    },
+  });
 });
