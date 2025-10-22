@@ -38,7 +38,6 @@ export const createUser = asyncHandler(
  * @access public
  * @route /api/users/login
  */
-
 export const loginUser = asyncHandler(
   async (req: Request<{}, {}, User>, res: Response) => {
     const { email, password } = req.body;
