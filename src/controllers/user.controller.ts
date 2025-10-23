@@ -48,7 +48,7 @@ export const loginUser = asyncHandler(
   async (req: Request<{}, {}, User>, res: Response) => {
     const { email, password } = req.body;
 
-    const user = await UserModel.findOne({ email });
+    const user = await UserModel.findOne({ email }).select("+password");
     if (!user || !(await user.comparePassword(password))) {
       res
         .status(StatusCodes.UNAUTHORIZED)
