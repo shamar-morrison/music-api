@@ -10,6 +10,7 @@ import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
 import { userRouter } from "routes/user.routes.js";
 import { limiter } from "utils/rate-limiter";
+import { artistRouter } from "routes/artist.routes";
 
 dotenv.config();
 const app = express();
@@ -32,6 +33,7 @@ mongoose
 
 // Routes
 app.use("/api/users", userRouter);
+app.use("/api/artists", artistRouter);
 
 // Error handling middleware
 // 404 errors

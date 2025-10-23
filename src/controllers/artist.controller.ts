@@ -1,5 +1,5 @@
 import { Artist, ArtistModel } from "models/artist.model";
-import type { Request } from "express";
+import type { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import asyncHandler from "express-async-handler";
 
@@ -10,14 +10,31 @@ import asyncHandler from "express-async-handler";
  */
 export const createArtist = asyncHandler(
   async (req: Request<{}, {}, Artist>, res: Response) => {
-    const body = req.body;
-    const artistExists = await ArtistModel.findOne({});
+    const { name, genres, bio } = req.body;
+    if (!name || !genres || !bio) {
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "Artist name, genre and bio are required" });
+      return;
+    }
 
+    const artistExists = await ArtistModel.findOne({ name });
     if (artistExists) {
       res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ message: "User already exists", success: false });
+        .json({ message: "Artist already exists", success: false });
       return;
     }
+
+    // create artist
+    await ArtistModel.create(req.body)
+      .then((artist) => {
+        return res
+          .status(StatusCodes.CREATED)
+          .json({ message: "Artist created sucessfully", artist });
+      })
+      .catch((error) => {
+        res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
+      });
   },
 );
