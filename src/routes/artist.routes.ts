@@ -1,6 +1,7 @@
 import { createArtist } from "controllers/artist.controller";
 import { Router } from "express";
 import { protect } from "middlewares/auth.middleware";
+import { upload } from "middlewares/upload";
 
 export const artistRouter = Router();
 
@@ -9,5 +10,5 @@ export const artistRouter = Router();
 // artistRouter.post("/login", loginUser);
 
 // protected routes
-artistRouter.post("/create", protect, createArtist);
+artistRouter.post("/create", protect, upload.single("image"), createArtist);
 // artistRouter.put("/profile", protect, updateUserProfile);

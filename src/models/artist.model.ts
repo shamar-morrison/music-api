@@ -26,13 +26,13 @@ export class Artist {
   })
   image!: string;
 
-  @prop({ ref: "Song", type: () => String })
+  @prop({ ref: "Song", type: () => [String] })
   genres!: Ref<Song>[];
 
   @prop({ default: 0, type: () => Number })
   followers!: number;
 
-  @prop({ ref: "Album", type: () => String })
+  @prop({ ref: "Album", type: () => [String] })
   albums!: Ref<Album>[];
 
   @prop({ default: false, type: () => Boolean })
