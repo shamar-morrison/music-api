@@ -25,6 +25,9 @@ declare global {
   }
 }
 
+/**
+ * Checks if user is authenticated
+ */
 export const protect = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     if (
