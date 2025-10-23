@@ -10,20 +10,26 @@ import { User, UserModel } from "models/user.model.js";
  */
 export const createUser = asyncHandler(
   async (req: Request<{}, {}, User>, res: Response) => {
+    if (!req.body) {
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "request body is required" });
+      return;
+    }
+
     const { name, email, password } = req.body;
     const userExists = await UserModel.findOne({ email });
 
     if (userExists) {
       res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ message: "User already exists", success: false });
+        .json({ message: "User already exists" });
       return;
     }
 
     UserModel.create({ name, email, password })
       .then(({ email, name, _id }) => {
         res.status(StatusCodes.CREATED).json({
-          success: true,
           user: { _id, name, email },
         });
       })
@@ -46,7 +52,7 @@ export const loginUser = asyncHandler(
     if (!user || !(await user.comparePassword(password))) {
       res
         .status(StatusCodes.UNAUTHORIZED)
-        .json({ message: "Invalid credentials", success: false });
+        .json({ message: "Invalid credentials" });
       return;
     }
     res.status(StatusCodes.OK).json({
@@ -65,7 +71,7 @@ export const loginUser = asyncHandler(
 
 /**
  * Get user profile
- * @access public
+ * @access private
  * @route /api/users/profile
  */
 export const getUserProfile = asyncHandler(async (req, res) => {
@@ -102,7 +108,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 
 /**
  * Update user profile
- * @access public
+ * @access private
  * @route /api/users/profile
  */
 export const updateUserProfile = asyncHandler(
