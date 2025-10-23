@@ -103,3 +103,16 @@ export const getArtists = asyncHandler(
     });
   },
 );
+
+export const getArtistById = asyncHandler(
+  async (req: Request<{ id: string }>, res) => {
+    const { id } = req.params;
+
+    const artist = await ArtistModel.findById(id);
+    if (!artist) {
+      res.status(StatusCodes.NOT_FOUND).json({ message: "Artist not found" });
+      return;
+    }
+    res.json(artist);
+  },
+);
