@@ -17,7 +17,7 @@ export const createUser = asyncHandler(
       return;
     }
 
-    const { name, email, password } = req.body;
+    const { name, email, password, isAdmin } = req.body;
     const userExists = await UserModel.findOne({ email });
 
     if (userExists) {
@@ -27,7 +27,7 @@ export const createUser = asyncHandler(
       return;
     }
 
-    UserModel.create({ name, email, password })
+    UserModel.create({ name, email, password, isAdmin })
       .then(({ email, name, _id }) => {
         res.status(StatusCodes.CREATED).json({
           user: { _id, name, email },
@@ -62,7 +62,7 @@ export const loginUser = asyncHandler(
         token: user.generateToken(user._id.toString()),
         email: user.email,
         profile_image: user.profilePicture,
-        is_admin: user.isAdmin,
+        isAdmin: user.isAdmin,
       },
     });
     return;
