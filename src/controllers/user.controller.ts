@@ -1,7 +1,7 @@
+import type { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import { StatusCodes } from "http-status-codes";
 import { User, UserModel } from "models/user.model.js";
-import type { Request, Response } from "express";
 
 /**
  * Regiser a new user

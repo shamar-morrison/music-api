@@ -1,13 +1,14 @@
 import "reflect-metadata";
-import express, {
-  type Response,
-  type Request,
-  type NextFunction,
-} from "express";
+
 import dotenv from "dotenv";
+import express, {
+  type NextFunction,
+  type Request,
+  type Response,
+} from "express";
+import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
 import { userRouter } from "routes/user.routes.js";
-import { StatusCodes } from "http-status-codes";
 import { limiter } from "utils/rate-limiter";
 
 dotenv.config();
@@ -41,7 +42,7 @@ app.use((_req, _res, next) => {
 });
 
 // Global Error Handler
-app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
+app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   res
     .status(err.status || StatusCodes.INTERNAL_SERVER_ERROR)
     .json({ message: err.message || "Not Found", status: "error" });

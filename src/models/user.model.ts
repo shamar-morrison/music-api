@@ -1,16 +1,17 @@
 import {
-  prop,
   getModelForClass,
-  type Ref,
   modelOptions,
   pre,
+  prop,
+  type Ref,
 } from "@typegoose/typegoose";
-import type { Song } from "./song.model.js";
+import bcrypt, { hash } from "bcrypt";
+import jwt from "jsonwebtoken";
+
 import type { Album } from "./album.model.js";
 import type { Artist } from "./artist.model.js";
 import type { Playlist } from "./playlist.model.js";
-import bcrypt, { hash } from "bcrypt";
-import jwt from "jsonwebtoken";
+import type { Song } from "./song.model.js";
 
 @pre<User>("save", async function (next) {
   if (!this.isModified("password")) return;

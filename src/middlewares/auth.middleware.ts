@@ -1,5 +1,5 @@
-import asyncHandler from "express-async-handler";
 import type { NextFunction, Request, Response } from "express";
+import asyncHandler from "express-async-handler";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import { UserModel } from "models/user.model";
