@@ -97,6 +97,10 @@ export const getArtists = asyncHandler(
       // .populate("tracks")
       .exec();
 
-    res.status(StatusCodes.OK).json({ query: search || "", artists });
+    res.status(StatusCodes.OK).json({
+      query: search || "",
+      artists,
+      page: page || 1,
+    });
   },
 );
