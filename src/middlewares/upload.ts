@@ -2,7 +2,7 @@ import type e from "express";
 import multer from "multer";
 import path from "path";
 
-export const storageConfig = multer.diskStorage({
+const storageConfig = multer.diskStorage({
   destination: (_req, _file, cb) => {
     cb(null, "/uploads");
   },
@@ -37,7 +37,7 @@ const fileFilter = (
   );
 };
 
-export const initUpload = multer({
+export const upload = multer({
   storage: storageConfig,
   limits: { fieldSize: 10 * 1024 * 1024 }, // 10MB
   fileFilter,
