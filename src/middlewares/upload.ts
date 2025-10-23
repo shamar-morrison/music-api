@@ -1,3 +1,4 @@
+import type e from "express";
 import multer from "multer";
 import path from "path";
 
@@ -13,10 +14,10 @@ export const storageConfig = multer.diskStorage({
   },
 });
 
-export const fileFilter = (
-  _req: any,
+const fileFilter = (
+  _req: e.Request,
   file: Express.Multer.File,
-  cb: (error: Error | null, state: boolean) => void,
+  cb: multer.FileFilterCallback,
 ) => {
   if (
     file.mimetype === "audio/mpeg" ||
@@ -33,10 +34,11 @@ export const fileFilter = (
     new Error(
       "unsupported file format. only images and video files are allowed.",
     ),
-    false,
   );
 };
 
 export const initUpload = multer({
   storage: storageConfig,
+  limits: { fieldSize: 10 * 1024 * 1024 }, // 10MB
+  fileFilter,
 });
