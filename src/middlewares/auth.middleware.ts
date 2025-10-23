@@ -19,6 +19,7 @@ declare global {
         name: string;
         email: string;
         profilePicture: string;
+        isAdmin: boolean;
       };
     }
   }
@@ -53,6 +54,7 @@ export const protect = asyncHandler(
         name: user.name,
         email: user.email,
         profilePicture: user.profilePicture,
+        isAdmin: user.isAdmin,
       };
       next();
     } catch (error: any) {
@@ -63,3 +65,13 @@ export const protect = asyncHandler(
     }
   },
 );
+
+export const isAdmin = asyncHandler(async (req, res, next) => {
+  if (!req.user || !req.user?.isAdmin) {
+    res
+      .status(StatusCodes.FORBIDDEN)
+      .json({ message: "User is not authorized to perform this action" });
+    return;
+  }
+  next();
+});
