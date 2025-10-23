@@ -1,4 +1,4 @@
-import { createArtist } from "controllers/artist.controller";
+import { createArtist, getArtists } from "controllers/artist.controller";
 import { Router } from "express";
 import { isAdmin, protect } from "middlewares/auth.middleware";
 import { upload } from "middlewares/upload";
@@ -6,7 +6,7 @@ import { upload } from "middlewares/upload";
 export const artistRouter = Router();
 
 // public routes
-// artistRouter.post("/register", createUser);
+artistRouter.get("/", getArtists);
 // artistRouter.post("/login", loginUser);
 
 // protected routes

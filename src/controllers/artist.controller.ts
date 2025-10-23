@@ -1,7 +1,7 @@
-import { Artist, ArtistModel } from "models/artist.model";
 import type { Request, Response } from "express";
-import { StatusCodes } from "http-status-codes";
 import asyncHandler from "express-async-handler";
+import { StatusCodes } from "http-status-codes";
+import { Artist, ArtistModel } from "models/artist.model";
 import { uploadToCloudinary } from "utils/cloudinary-upload";
 
 /**
@@ -57,5 +57,46 @@ export const createArtist = asyncHandler(
       .catch((error) => {
         res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
       });
+  },
+);
+
+/**
+ * Get all artists with filtering and pagination
+ * @access public
+ * @route GET /api/artists?genre=rock&search=killa&page=1&limit=10
+ */
+export const getArtists = asyncHandler(
+  async (
+    req: Request<
+      {},
+      {},
+      {},
+      { genre?: string; search?: string; page?: string; limit?: string }
+    >,
+    res: Response,
+  ) => {
+    const { genre, search, page, limit } = req.query;
+
+    const pageNum = parseInt(page as string) || 1;
+    const limitNum = parseInt(limit as string) || 10;
+
+    const query: any = {};
+
+    if (genre) {
+      query.genres = { $in: [genre] };
+    }
+
+    if (search) {
+      query.name = { $regex: search, $options: "i" };
+    }
+
+    const artists = await ArtistModel.find(query)
+      .sort({ name: 1 })
+      .skip((pageNum - 1) * limitNum)
+      .limit(limitNum)
+      // .populate("tracks")
+      .exec();
+
+    res.status(StatusCodes.OK).json({ query: search || "", artists });
   },
 );

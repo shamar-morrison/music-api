@@ -8,9 +8,9 @@ import express, {
 } from "express";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
+import { artistRouter } from "routes/artist.routes";
 import { userRouter } from "routes/user.routes.js";
 import { limiter } from "utils/rate-limiter";
-import { artistRouter } from "routes/artist.routes";
 
 dotenv.config();
 const app = express();
