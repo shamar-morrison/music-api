@@ -83,7 +83,7 @@ export const getArtists = asyncHandler(
     const query: any = {};
 
     if (genre) {
-      query.genres = { $in: [genre] };
+      query.genres = { $in: [new RegExp(`^${genre}$`, "i")] };
     }
 
     if (search) {
@@ -94,7 +94,6 @@ export const getArtists = asyncHandler(
       .sort({ name: 1 })
       .skip((pageNum - 1) * limitNum)
       .limit(limitNum)
-      // .populate("tracks")
       .exec();
 
     res.status(StatusCodes.OK).json({
