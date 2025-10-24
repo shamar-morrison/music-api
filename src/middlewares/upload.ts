@@ -24,7 +24,8 @@ const fileFilter = (
     file.mimetype === "audio/wav" ||
     file.mimetype == "image/jpeg" ||
     file.mimetype == "image/jpg" ||
-    file.mimetype == "image/png"
+    file.mimetype == "image/png" ||
+    file.mimetype == "image/avif"
   ) {
     cb(null, true);
     return;

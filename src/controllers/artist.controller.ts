@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import { StatusCodes } from "http-status-codes";
-import { Artist, ArtistModel } from "models/artist.model";
+import { ArtistModel } from "models/artist.model";
 import { uploadToCloudinary } from "utils/cloudinary-upload";
 
 import type {
@@ -171,5 +171,25 @@ export const updateArtistDetails = asyncHandler(
       message: "Artist updated successfully",
       artist: updatedArtist,
     });
+  },
+);
+
+/**
+ * Delete Artist
+ * @access public
+ * @route DELETE /api/artists/:id
+ */
+export const deleteArtist = asyncHandler(
+  async (req: Request<{ id: string }>, res) => {
+    const { id } = req.params;
+    const artist = await ArtistModel.findById(id);
+
+    if (!artist) {
+      res.status(StatusCodes.NOT_FOUND).json({ message: "Artist not found" });
+      return;
+    }
+
+    await ArtistModel.deleteOne(artist._id);
+    res.json({ message: "Artist deleted successfully" });
   },
 );

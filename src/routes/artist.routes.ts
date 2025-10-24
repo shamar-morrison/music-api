@@ -1,7 +1,9 @@
 import {
   createArtist,
+  deleteArtist,
   getArtistById,
   getArtists,
+  updateArtistDetails,
 } from "controllers/artist.controller";
 import { Router } from "express";
 import { isAdmin, protect } from "middlewares/auth.middleware";
@@ -12,7 +14,6 @@ export const artistRouter = Router();
 // public routes
 artistRouter.get("/", getArtists);
 artistRouter.get("/:id", getArtistById);
-// artistRouter.post("/login", loginUser);
 
 // protected routes
 artistRouter.post(
@@ -22,4 +23,5 @@ artistRouter.post(
   upload.single("image"),
   createArtist,
 );
-// artistRouter.put("/profile", protect, updateUserProfile);
+artistRouter.put("/:id", protect, upload.single("image"), updateArtistDetails);
+artistRouter.delete("/:id", protect, deleteArtist);
