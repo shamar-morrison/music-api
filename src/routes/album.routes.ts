@@ -2,6 +2,7 @@ import {
   addSongsToAlbum,
   createAlbum,
   deleteAlbum,
+  getAlbumById,
   getAlbums,
   updateAlbum,
 } from "controllers/album.controller";
@@ -20,5 +21,6 @@ albumRouter.post(
   createAlbum,
 );
 albumRouter.delete("/:id/add-songs", protect, isAdmin, addSongsToAlbum);
+albumRouter.get("/:id", getAlbumById);
 albumRouter.post("/:id", protect, isAdmin, upload.single("image"), updateAlbum);
 albumRouter.delete("/:id", protect, isAdmin, deleteAlbum);

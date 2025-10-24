@@ -148,3 +148,22 @@ export const addSongsToAlbum = asyncHandler(
     res.json({ message: "Songs added to album" });
   },
 );
+
+/**
+ * Get album by id
+ * @access private
+ * @route GET /api/albums/:id
+ */
+export const getAlbumById = asyncHandler(
+  async (req: Request<{ id: string }>, res) => {
+    const { id } = req.params;
+
+    const album = await AlbumModel.findById(id);
+    if (!album) {
+      res.status(StatusCodes.NOT_FOUND).json({ message: "Album not found" });
+      return;
+    }
+
+    res.json(album);
+  },
+);
