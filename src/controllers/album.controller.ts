@@ -1,7 +1,7 @@
 import type { Request } from "express";
 import asyncHandler from "express-async-handler";
 import { StatusCodes } from "http-status-codes";
-import { AlbumModel } from "models/album.model";
+import { Album, AlbumModel } from "models/album.model";
 import type { createAlbumData } from "types/album.types";
 import { uploadToCloudinary } from "utils/cloudinary-upload";
 import { validateRequiredFields } from "utils/validation";
@@ -60,12 +60,45 @@ export const createAlbum = asyncHandler(
       imageUrl = result.secure_url;
     }
 
-    await AlbumModel.create({
+    const album = await AlbumModel.create({
       ...req.body,
       ...(imageUrl && { image: imageUrl }),
     });
     res
       .status(StatusCodes.CREATED)
-      .json({ message: "Album created successfully" });
+      .json({ message: "Album created successfully", album });
+  },
+);
+
+/**
+ * Update an Album
+ * @access private
+ * @route POST /api/albums/:id/update
+ */
+export const updateAlbum = asyncHandler(
+  async (req: Request<{ id: string }, {}, Partial<Album>>, res) => {
+    const { id } = req.params;
+
+    const album = await AlbumModel.findById(id);
+    if (!album) {
+      res.status(StatusCodes.NOT_FOUND).json({ message: "Album not found" });
+      return;
+    }
+
+    let imageUrl = "";
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.path, IMAGE_PATH);
+      imageUrl = result.secure_url;
+    }
+
+    const updatedAlbum = album.updateOne(
+      { ...req.body, ...(imageUrl && { coverImage: imageUrl }) },
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+
+    res.json({ message: "Album updated successfully", updatedAlbum });
   },
 );

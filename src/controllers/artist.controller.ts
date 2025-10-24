@@ -143,8 +143,7 @@ export const updateArtistDetails = asyncHandler(
       return;
     }
 
-    // Handle image upload if provided
-    let imageUrl = artist.image; // Keep existing image by default
+    let imageUrl = artist.image;
     if (req.file) {
       const result = await uploadToCloudinary(req.file.path, IMAGE_PATH);
       imageUrl = result.secure_url;
