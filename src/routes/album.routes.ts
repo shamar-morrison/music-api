@@ -1,4 +1,9 @@
-import { createAlbum, getAlbums } from "controllers/album.controller";
+import {
+  createAlbum,
+  deleteAlbum,
+  getAlbums,
+  updateAlbum,
+} from "controllers/album.controller";
 import { Router } from "express";
 import { isAdmin, protect } from "middlewares/auth.middleware";
 import { upload } from "middlewares/upload";
@@ -13,3 +18,5 @@ albumRouter.post(
   upload.single("image"),
   createAlbum,
 );
+albumRouter.post("/:id", protect, isAdmin, upload.single("image"), updateAlbum);
+albumRouter.delete("/:id", protect, isAdmin, deleteAlbum);

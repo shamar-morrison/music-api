@@ -2,6 +2,7 @@ import type { Request } from "express";
 import asyncHandler from "express-async-handler";
 import { StatusCodes } from "http-status-codes";
 import { Album, AlbumModel } from "models/album.model";
+import { SongModel } from "models/song.model";
 import type { createAlbumData } from "types/album.types";
 import { uploadToCloudinary } from "utils/cloudinary-upload";
 import { validateRequiredFields } from "utils/validation";
@@ -62,7 +63,7 @@ export const createAlbum = asyncHandler(
 
     const album = await AlbumModel.create({
       ...req.body,
-      ...(imageUrl && { image: imageUrl }),
+      ...(imageUrl && { coverImage: imageUrl }),
     });
     res
       .status(StatusCodes.CREATED)
@@ -73,7 +74,7 @@ export const createAlbum = asyncHandler(
 /**
  * Update an Album
  * @access private
- * @route POST /api/albums/:id/update
+ * @route POST /api/albums/:id
  */
 export const updateAlbum = asyncHandler(
   async (req: Request<{ id: string }, {}, Partial<Album>>, res) => {
@@ -100,5 +101,28 @@ export const updateAlbum = asyncHandler(
     );
 
     res.json({ message: "Album updated successfully", updatedAlbum });
+  },
+);
+
+/**
+ * Deletes an album by its id
+ * @access private
+ * @route DELETE /api/albums/:id
+ */
+export const deleteAlbum = asyncHandler(
+  async (req: Request<{ id: string }>, res) => {
+    const { id } = req.params;
+    const album = await AlbumModel.findById(id);
+
+    if (!album) {
+      res.status(StatusCodes.NOT_FOUND).json({ message: "Album not found" });
+      return;
+    }
+
+    // Delete all songs associated with the album
+    await SongModel.deleteMany({ album: id });
+
+    await AlbumModel.deleteOne(album._id);
+    res.json({ message: "Album deleted successfully" });
   },
 );
