@@ -1,7 +1,9 @@
 import type { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import { StatusCodes } from "http-status-codes";
+import { Album, AlbumModel } from "models/album.model.js";
 import { ArtistModel } from "models/artist.model";
+import { Song, SongModel } from "models/song.model.js";
 import { uploadToCloudinary } from "utils/cloudinary-upload";
 
 import type {
@@ -188,6 +190,12 @@ export const deleteArtist = asyncHandler(
       res.status(StatusCodes.NOT_FOUND).json({ message: "Artist not found" });
       return;
     }
+
+    // Delete all songs associated with the artist
+    await SongModel.deleteMany({ artist: id });
+
+    // Delete all albums associated with the artist
+    await AlbumModel.deleteMany({ artist: id });
 
     await ArtistModel.deleteOne(artist._id);
     res.json({ message: "Artist deleted successfully" });
