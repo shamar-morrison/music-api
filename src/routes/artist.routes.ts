@@ -24,4 +24,4 @@ artistRouter.post(
   createArtist,
 );
 artistRouter.put("/:id", protect, upload.single("image"), updateArtistDetails);
-artistRouter.delete("/:id", protect, deleteArtist);
+artistRouter.delete("/:id", protect, isAdmin, deleteArtist);
