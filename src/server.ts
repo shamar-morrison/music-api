@@ -11,6 +11,7 @@ import mongoose from "mongoose";
 import { artistRouter } from "routes/artist.routes";
 import { userRouter } from "routes/user.routes.js";
 import { limiter } from "utils/rate-limiter";
+import { albumRouter } from "routes/album.routes";
 
 dotenv.config();
 const app = express();
@@ -34,6 +35,7 @@ mongoose
 // Routes
 app.use("/api/users", userRouter);
 app.use("/api/artists", artistRouter);
+app.use("/api/albums", albumRouter);
 
 // Error handling middleware
 // 404 errors

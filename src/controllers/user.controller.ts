@@ -12,7 +12,7 @@ import type {
 /**
  * Regiser a new user
  * @access public
- * @route /api/users/regiser
+ * @route POST /api/users/regiser
  */
 export const createUser = asyncHandler(
   async (req: Request<{}, {}, CreateUserData>, res: Response) => {
@@ -48,7 +48,7 @@ export const createUser = asyncHandler(
 /**
  * Login user
  * @access public
- * @route /api/users/login
+ * @route POST /api/users/login
  */
 export const loginUser = asyncHandler(
   async (req: Request<{}, {}, LoginUserData>, res: Response) => {
@@ -78,7 +78,7 @@ export const loginUser = asyncHandler(
 /**
  * Get user profile
  * @access private
- * @route /api/users/profile
+ * @route GET /api/users/profile
  */
 export const getUserProfile = asyncHandler(async (req, res) => {
   if (!req.user) {
@@ -115,7 +115,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 /**
  * Update user profile
  * @access private
- * @route /api/users/profile
+ * @route PUT /api/users/profile
  */
 export const updateUserProfile = asyncHandler(
   async (req: Request<{}, {}, UpdateUserData>, res) => {
