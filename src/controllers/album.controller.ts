@@ -1,8 +1,9 @@
+import type { Ref } from "@typegoose/typegoose";
 import type { Request } from "express";
 import asyncHandler from "express-async-handler";
 import { StatusCodes } from "http-status-codes";
 import { Album, AlbumModel } from "models/album.model";
-import { SongModel } from "models/song.model";
+import { Song, SongModel } from "models/song.model";
 import type { createAlbumData } from "types/album.types";
 import { uploadToCloudinary } from "utils/cloudinary-upload";
 import { validateRequiredFields } from "utils/validation";
@@ -124,5 +125,26 @@ export const deleteAlbum = asyncHandler(
 
     await AlbumModel.deleteOne(album._id);
     res.json({ message: "Album deleted successfully" });
+  },
+);
+
+/**
+ * Add songs to an album
+ * @access private
+ * @route POST /api/albums/:id/add-songs
+ */
+export const addSongsToAlbum = asyncHandler(
+  async (req: Request<{ id: string }, {}, { songs: Ref<Song> }>, res) => {
+    const { id } = req.params;
+    const { songs } = req.body;
+
+    const album = await AlbumModel.findById(id);
+    if (!album) {
+      res.status(StatusCodes.NOT_FOUND).json({ message: "Album not found" });
+      return;
+    }
+
+    album.updateOne({ $push: { songs } });
+    res.json({ message: "Songs added to album" });
   },
 );

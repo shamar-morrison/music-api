@@ -1,4 +1,5 @@
 import {
+  addSongsToAlbum,
   createAlbum,
   deleteAlbum,
   getAlbums,
@@ -18,5 +19,6 @@ albumRouter.post(
   upload.single("image"),
   createAlbum,
 );
+albumRouter.delete("/:id/add-songs", protect, isAdmin, addSongsToAlbum);
 albumRouter.post("/:id", protect, isAdmin, upload.single("image"), updateAlbum);
 albumRouter.delete("/:id", protect, isAdmin, deleteAlbum);
