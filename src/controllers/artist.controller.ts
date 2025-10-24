@@ -104,6 +104,11 @@ export const getArtists = asyncHandler(
   },
 );
 
+/**
+ * Get artist by ID
+ * @access public
+ * @route GET /api/artists?id={{id}}
+ */
 export const getArtistById = asyncHandler(
   async (req: Request<{ id: string }>, res) => {
     const { id } = req.params;
