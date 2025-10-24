@@ -107,7 +107,7 @@ export const getArtists = asyncHandler(
 /**
  * Get artist by ID
  * @access public
- * @route GET /api/artists?id={{id}}
+ * @route GET /api/artists/:id
  */
 export const getArtistById = asyncHandler(
   async (req: Request<{ id: string }>, res) => {
@@ -121,3 +121,10 @@ export const getArtistById = asyncHandler(
     res.json(artist);
   },
 );
+
+/**
+ * Update Artist details
+ * @access public
+ * @route POST /api/artists/:id
+ */
+export const updateArtistDetails = asyncHandler(() => {});

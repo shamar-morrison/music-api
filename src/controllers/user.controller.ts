@@ -3,13 +3,19 @@ import asyncHandler from "express-async-handler";
 import { StatusCodes } from "http-status-codes";
 import { User, UserModel } from "models/user.model.js";
 
+import type {
+  CreateUserData,
+  LoginUserData,
+  UpdateUserData,
+} from "../types/user.types.js";
+
 /**
  * Regiser a new user
  * @access public
  * @route /api/users/regiser
  */
 export const createUser = asyncHandler(
-  async (req: Request<{}, {}, User>, res: Response) => {
+  async (req: Request<{}, {}, CreateUserData>, res: Response) => {
     if (!req.body) {
       res
         .status(StatusCodes.BAD_REQUEST)
@@ -45,7 +51,7 @@ export const createUser = asyncHandler(
  * @route /api/users/login
  */
 export const loginUser = asyncHandler(
-  async (req: Request<{}, {}, User>, res: Response) => {
+  async (req: Request<{}, {}, LoginUserData>, res: Response) => {
     const { email, password } = req.body;
 
     const user = await UserModel.findOne({ email }).select("+password");
@@ -112,14 +118,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
  * @route /api/users/profile
  */
 export const updateUserProfile = asyncHandler(
-  async (
-    req: Request<
-      {},
-      {},
-      { name: string; email: string; profilePicture: string }
-    >,
-    res,
-  ) => {
+  async (req: Request<{}, {}, UpdateUserData>, res) => {
     if (!req.user) {
       res
         .status(StatusCodes.UNAUTHORIZED)
