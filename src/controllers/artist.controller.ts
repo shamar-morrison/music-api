@@ -205,9 +205,48 @@ export const deleteArtist = asyncHandler(
 /**
  * Get top 10 Artists based on followers
  * @access public
- * @route GET /api/artists/top
+ * @route GET /api/artists/top?limit={{limit}}
  */
-export const getTopArtists = asyncHandler(async (_req, res) => {
-  const artists = await ArtistModel.find().sort({ followers: -1 }).limit(10);
-  res.json(artists);
-});
+export const getTopArtists = asyncHandler(
+  async (req: Request<{}, {}, {}, { limit?: string }>, res) => {
+    const { limit } = req.query;
+    const limitNum = parseInt(limit as string) || 10;
+    const artists = await ArtistModel.find()
+      .sort({ followers: -1 })
+      .limit(limitNum);
+    res.json(artists);
+  },
+);
+
+/**
+ * Get Artist's top songs by plays
+ * @access public
+ * @route GET /api/artists/:id/top-songs?limit={{limit}}
+ */
+export const getArtistTopSongs = asyncHandler(
+  async (req: Request<{ id: string }, {}, {}, { limit?: string }>, res) => {
+    const { id } = req.params;
+    const { limit } = req.query;
+    const parsedLimit = parseInt(limit as string) || 10;
+
+    const artist = await ArtistModel.findById(id);
+    if (!artist) {
+      res.status(StatusCodes.NOT_FOUND).json({ message: "Artist not found" });
+      return;
+    }
+
+    const songs = await SongModel.find({ artist: id })
+      .sort({ plays: -1 })
+      .limit(parsedLimit)
+      .populate("album", "title coverImage");
+
+    if (songs.length === 0) {
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "No songs found for this artist" });
+      return;
+    }
+
+    res.json(songs);
+  },
+);
