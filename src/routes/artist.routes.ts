@@ -3,6 +3,7 @@ import {
   deleteArtist,
   getArtistById,
   getArtists,
+  getTopArtists,
   updateArtistDetails,
 } from "controllers/artist.controller";
 import { Router } from "express";
@@ -13,6 +14,7 @@ export const artistRouter = Router();
 
 // public routes
 artistRouter.get("/", getArtists);
+artistRouter.get("/top", getTopArtists);
 artistRouter.get("/:id", getArtistById);
 
 // protected routes

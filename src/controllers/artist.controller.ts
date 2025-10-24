@@ -201,3 +201,13 @@ export const deleteArtist = asyncHandler(
     res.json({ message: "Artist deleted successfully" });
   },
 );
+
+/**
+ * Get top 10 Artists based on followers
+ * @access public
+ * @route GET /api/artists/top
+ */
+export const getTopArtists = asyncHandler(async (_req, res) => {
+  const artists = await ArtistModel.find().sort({ followers: -1 }).limit(10);
+  res.json(artists);
+});
