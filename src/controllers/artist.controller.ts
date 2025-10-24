@@ -4,13 +4,20 @@ import { StatusCodes } from "http-status-codes";
 import { Artist, ArtistModel } from "models/artist.model";
 import { uploadToCloudinary } from "utils/cloudinary-upload";
 
+import type {
+  CreateArtistData,
+  UpdateArtistData,
+} from "../types/artist.types.js";
+
+const IMAGE_PATH = "music-api/artists";
+
 /**
  * Create a new artist
  * @access private
  * @route /api/artists
  */
 export const createArtist = asyncHandler(
-  async (req: Request<{}, {}, Artist>, res: Response) => {
+  async (req: Request<{}, {}, CreateArtistData>, res: Response) => {
     const { name, genres, bio } = req.body;
 
     // Parse genres if it's a string (from multipart form data)
@@ -35,10 +42,7 @@ export const createArtist = asyncHandler(
     // upload artist image if provided
     let imageUrl = "";
     if (req.file) {
-      const result = await uploadToCloudinary(
-        req.file.path,
-        "music-api/artists",
-      );
+      const result = await uploadToCloudinary(req.file.path, IMAGE_PATH);
       imageUrl = result.secure_url;
     }
 
@@ -125,6 +129,47 @@ export const getArtistById = asyncHandler(
 /**
  * Update Artist details
  * @access public
- * @route POST /api/artists/:id
+ * @route PUT /api/artists/:id
  */
-export const updateArtistDetails = asyncHandler(() => {});
+export const updateArtistDetails = asyncHandler(
+  async (req: Request<{ id: string }, {}, UpdateArtistData>, res: Response) => {
+    const { id } = req.params;
+
+    const artist = await ArtistModel.findById(id);
+    if (!artist) {
+      res.status(StatusCodes.NOT_FOUND).json({ message: "Artist not found" });
+      return;
+    }
+
+    // Handle image upload if provided
+    let imageUrl = artist.image; // Keep existing image by default
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.path, IMAGE_PATH);
+      imageUrl = result.secure_url;
+    }
+
+    // Parse genres if it's a string (from multipart form data)
+    const parsedGenres =
+      typeof req.body.genres === "string"
+        ? JSON.parse(req.body.genres)
+        : req.body.genres;
+
+    const updatedArtist = await ArtistModel.findByIdAndUpdate(
+      id,
+      {
+        ...req.body,
+        ...(parsedGenres && { genres: parsedGenres }),
+        ...(imageUrl && { image: imageUrl }),
+      },
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+
+    res.status(StatusCodes.OK).json({
+      message: "Artist updated successfully",
+      artist: updatedArtist,
+    });
+  },
+);
