@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import { AlbumModel } from "models/album.model";
 import type { createAlbumData } from "types/album.types";
 import { uploadToCloudinary } from "utils/cloudinary-upload";
+import { validateRequiredFields } from "utils/validation";
 
 const IMAGE_PATH = "music-api/albums";
 
@@ -28,6 +29,22 @@ export const getAlbums = asyncHandler(async (_req, res) => {
  */
 export const createAlbum = asyncHandler(
   async (req: Request<{}, {}, createAlbumData>, res) => {
+    // Validate required fields
+    const requiredFields = ["title", "description", "artist", "releaseDate"];
+    const { isValid, missingFields } = validateRequiredFields(
+      req.body,
+      requiredFields,
+    );
+
+    if (!isValid) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        message: "Missing required fields",
+        missingFields,
+        requiredFields,
+      });
+      return;
+    }
+
     const albumExists = await AlbumModel.find({ title: req.body.title });
 
     if (albumExists.length > 0) {
