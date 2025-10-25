@@ -8,10 +8,10 @@ import express, {
 } from "express";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
+import { albumRouter } from "routes/album.routes";
 import { artistRouter } from "routes/artist.routes";
 import { userRouter } from "routes/user.routes.js";
 import { limiter } from "utils/rate-limiter";
-import { albumRouter } from "routes/album.routes";
 
 dotenv.config();
 const app = express();
