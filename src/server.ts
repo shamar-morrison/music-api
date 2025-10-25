@@ -10,14 +10,16 @@ import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
 import { albumRouter } from "routes/album.routes";
 import { artistRouter } from "routes/artist.routes";
+import { songsRouter } from "routes/songs.routes";
 import { userRouter } from "routes/user.routes.js";
 import { limiter } from "utils/rate-limiter";
 
 dotenv.config();
 const app = express();
 
-// Allow JSON to be parsed
+// Allow JSON and form data to be parsed
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Rate limit
 app.use(limiter);
@@ -36,6 +38,7 @@ mongoose
 app.use("/api/users", userRouter);
 app.use("/api/artists", artistRouter);
 app.use("/api/albums", albumRouter);
+app.use("/api/songs", songsRouter);
 
 // Error handling middleware
 // 404 errors
