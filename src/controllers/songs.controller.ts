@@ -176,7 +176,6 @@ export const getSongById = asyncHandler(
     const { id } = req.params;
 
     const song = await SongModel.findById(id)
-      .populate("artist", "name image bio")
       .populate("album", "title coverImage description")
       .populate("featuredArtists", "name image");
 
