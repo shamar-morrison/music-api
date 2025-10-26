@@ -28,9 +28,9 @@ songsRouter.post(
 
 songsRouter.get("/:id", getSongById);
 
-songsRouter.put("/:id", updateSongDetails);
+songsRouter.put("/:id", protect, isAdmin, updateSongDetails);
 
-songsRouter.delete("/:id", deleteSong);
+songsRouter.delete("/:id", protect, isAdmin, deleteSong);
 
 songsRouter.post("/:id/add-album", addAlbumToSong);
 
