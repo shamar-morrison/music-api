@@ -48,7 +48,7 @@ export const getAllSongs = asyncHandler(
     }
 
     if (artist) {
-      query.artist = artist;
+      query.artist = { $regex: artist, $options: "i" };
     }
 
     if (album) {
@@ -60,7 +60,6 @@ export const getAllSongs = asyncHandler(
     }
 
     const songs = await SongModel.find(query)
-      .populate("artist", "name image")
       .populate("album", "title coverImage")
       .sort({ createdAt: -1 })
       .skip((pageNum - 1) * limitNum)
