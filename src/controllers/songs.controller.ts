@@ -13,7 +13,7 @@ import type {
 import { uploadToCloudinary } from "utils/cloudinary-upload";
 import { validateRequiredFieldsWithFiles } from "utils/validation";
 
-const IMAGE_PATH = "music-api/songs";
+const AUDIO_PATH = "music-api/songs";
 /**
  * Get all songs with filtering and pagination
  * @access public
@@ -124,20 +124,27 @@ export const createSong = asyncHandler(
     let coverImageUrl = req.body.coverImage;
 
     // Handle audio file upload
-    if (req.files && Array.isArray(req.files) && req.files.length > 0) {
-      const audioFile = req.files.find((file) => file.fieldname === "audio");
-      if (audioFile) {
-        const audioResult = await uploadToCloudinary(
-          audioFile.path,
-          IMAGE_PATH,
-        );
-        audioUrl = audioResult.secure_url;
-      }
+    const files = req.files as
+      | Record<string, Express.Multer.File[]>
+      | undefined;
+    if (files && files.audio && files.audio[0]) {
+      const audioFile = files.audio[0];
+      const audioResult = await uploadToCloudinary(audioFile.path, AUDIO_PATH);
+      audioUrl = audioResult.secure_url;
+    }
+
+    // Validate that audioUrl is present before creating the song
+    if (!audioUrl) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        message: "Audio file upload failed or no audio file provided",
+      });
+      return;
     }
 
     // Handle cover image upload
-    if (req.file) {
-      const imageResult = await uploadToCloudinary(req.file.path, IMAGE_PATH);
+    if (files && files.coverImage && files.coverImage[0]) {
+      const imageFile = files.coverImage[0];
+      const imageResult = await uploadToCloudinary(imageFile.path, AUDIO_PATH);
       coverImageUrl = imageResult.secure_url;
     }
 
@@ -202,20 +209,19 @@ export const updateSongDetails = asyncHandler(
     let coverImageUrl = song.coverImage;
 
     // Handle audio file upload
-    if (req.files && Array.isArray(req.files) && req.files.length > 0) {
-      const audioFile = req.files.find((file) => file.fieldname === "audio");
-      if (audioFile) {
-        const audioResult = await uploadToCloudinary(
-          audioFile.path,
-          IMAGE_PATH,
-        );
-        audioUrl = audioResult.secure_url;
-      }
+    const files = req.files as
+      | Record<string, Express.Multer.File[]>
+      | undefined;
+    if (files && files.audio && files.audio[0]) {
+      const audioFile = files.audio[0];
+      const audioResult = await uploadToCloudinary(audioFile.path, AUDIO_PATH);
+      audioUrl = audioResult.secure_url;
     }
 
     // Handle cover image upload
-    if (req.file) {
-      const imageResult = await uploadToCloudinary(req.file.path, IMAGE_PATH);
+    if (files && files.coverImage && files.coverImage[0]) {
+      const imageFile = files.coverImage[0];
+      const imageResult = await uploadToCloudinary(imageFile.path, AUDIO_PATH);
       coverImageUrl = imageResult.secure_url;
     }
 
