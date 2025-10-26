@@ -235,7 +235,7 @@ export const updateSongDetails = asyncHandler(
         runValidators: true,
       },
     )
-      .populate("artist", "name image")
+      // .populate("artist", "name image")
       .populate("album", "title coverImage");
 
     res.json({ message: "Song updated successfully", song: updatedSong });
