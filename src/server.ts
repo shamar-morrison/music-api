@@ -8,10 +8,12 @@ import express, {
 } from "express";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
+import swaggerUi from "swagger-ui-express";
 import { albumRouter } from "routes/album.routes";
 import { artistRouter } from "routes/artist.routes";
 import { songsRouter } from "routes/songs.routes";
 import { userRouter } from "routes/user.routes.js";
+import { swaggerSpec } from "./config/swagger.js";
 import { limiter } from "utils/rate-limiter";
 
 dotenv.config();
@@ -23,6 +25,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Rate limit
 app.use(limiter);
+
+// Swagger UI
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // connect to database
 mongoose
