@@ -14,7 +14,7 @@ const options: swaggerJsdoc.Options = {
     },
     servers: [
       {
-        url: "https://music-api-qxuc.vercel.app",
+        url: "https://music-api-five-omega.vercel.app/",
         description: "Production server",
       },
       {
@@ -349,4 +349,3 @@ const options: swaggerJsdoc.Options = {
 };
 
 export const swaggerSpec = swaggerJsdoc(options);
-
