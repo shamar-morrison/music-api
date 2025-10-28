@@ -1,0 +1,6 @@
+node_modules
+uploads
+.env*
+.git
+*.map
+# Note: src/, dist/, and public/ are needed for Vercel build and deployment

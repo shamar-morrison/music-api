@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
-    "build": "tsc && tsc-alias",
+    "build": "tsc && tsc-alias && npm run build:swagger && npm run copy:public",
+    "build:swagger": "tsx src/scripts/generate-swagger-json.ts",
+    "copy:public": "cp -r public dist/",
+    "vercel-build": "npm run build",
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "format": "prettier --write .",
@@ -17,6 +20,9 @@
   "author": "Shamar Morrison",
   "license": "ISC",
   "type": "module",
+  "engines": {
+    "node": "20.x"
+  },
   "dependencies": {
     "@typegoose/typegoose": "^12.20.0",
     "bcrypt": "^6.0.0",
@@ -28,7 +34,9 @@
     "http-status-codes": "^2.3.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.1",
-    "multer": "^2.0.2"
+    "multer": "^2.0.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
@@ -36,6 +44,8 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.0.0",
     "@types/node": "^24.8.1",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "@typescript-eslint/eslint-plugin": "^8.46.1",
     "@typescript-eslint/parser": "^8.46.1",
     "eslint": "^9.38.0",

@@ -1,0 +1,1892 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Music API",
+    "version": "1.0.0",
+    "description": "A RESTful API for a music streaming service, built with Node.js, Express, MongoDB and Cloudinary",
+    "contact": {
+      "name": "Music API Support"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://music-api-qxuc.vercel.app",
+      "description": "Production server"
+    },
+    {
+      "url": "http://localhost:5000",
+      "description": "Development server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Enter JWT token"
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "User ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User's email address"
+          },
+          "profilePicture": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL to user's profile picture"
+          },
+          "isAdmin": {
+            "type": "boolean",
+            "description": "Whether user has admin privileges",
+            "default": false
+          },
+          "likedSongs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of liked song IDs"
+          },
+          "likedAlbums": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of liked album IDs"
+          },
+          "followedArtists": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of followed artist IDs"
+          },
+          "followedPlaylists": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of followed playlist IDs"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Artist": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Artist ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "Artist name"
+          },
+          "bio": {
+            "type": "string",
+            "description": "Artist biography"
+          },
+          "image": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL to artist image"
+          },
+          "genres": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of genre tags"
+          },
+          "followers": {
+            "type": "number",
+            "description": "Number of followers",
+            "default": 0
+          },
+          "albums": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of album IDs"
+          },
+          "isVerified": {
+            "type": "boolean",
+            "description": "Whether artist is verified",
+            "default": false
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Album": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Album ID"
+          },
+          "title": {
+            "type": "string",
+            "description": "Album title"
+          },
+          "description": {
+            "type": "string",
+            "description": "Album description"
+          },
+          "artist": {
+            "type": "string",
+            "description": "Artist ID"
+          },
+          "releaseDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Release date"
+          },
+          "coverImage": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL to album cover image"
+          },
+          "songs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of song IDs"
+          },
+          "genre": {
+            "type": "string",
+            "description": "Album genre"
+          },
+          "likes": {
+            "type": "number",
+            "description": "Number of likes",
+            "default": 0
+          },
+          "isExplicit": {
+            "type": "boolean",
+            "description": "Whether album contains explicit content",
+            "default": false
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Song": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Song ID"
+          },
+          "title": {
+            "type": "string",
+            "description": "Song title"
+          },
+          "artist": {
+            "type": "string",
+            "description": "Artist ID"
+          },
+          "album": {
+            "type": "string",
+            "description": "Album ID"
+          },
+          "duration": {
+            "type": "number",
+            "description": "Duration in seconds"
+          },
+          "audioUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL to audio file"
+          },
+          "coverImage": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL to cover image"
+          },
+          "releaseDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Release date"
+          },
+          "genre": {
+            "type": "string",
+            "description": "Song genre"
+          },
+          "plays": {
+            "type": "number",
+            "description": "Number of plays",
+            "default": 0
+          },
+          "likes": {
+            "type": "number",
+            "description": "Number of likes",
+            "default": 0
+          },
+          "isExplicit": {
+            "type": "boolean",
+            "description": "Whether song contains explicit content",
+            "default": false
+          },
+          "featuredArtists": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of featured artist IDs"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Error message"
+          },
+          "status": {
+            "type": "string",
+            "description": "Error status"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User email"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "description": "User password",
+            "minLength": 6
+          }
+        }
+      },
+      "RegisterRequest": {
+        "type": "object",
+        "required": [
+          "name",
+          "email",
+          "password"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User email"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "description": "User password",
+            "minLength": 6
+          },
+          "isAdmin": {
+            "type": "boolean",
+            "description": "Whether user has admin privileges",
+            "default": false
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/albums": {
+      "get": {
+        "summary": "Get all albums",
+        "description": "Retrieve a list of all albums",
+        "tags": [
+          "Albums"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of albums retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Album"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/albums/create": {
+      "post": {
+        "summary": "Create a new album (Admin only)",
+        "description": "Create a new album with title, description, artist, and optional cover image",
+        "tags": [
+          "Albums"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "title",
+                  "description",
+                  "artist",
+                  "releaseDate"
+                ],
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Album title"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Album description"
+                  },
+                  "artist": {
+                    "type": "string",
+                    "description": "Artist ID"
+                  },
+                  "releaseDate": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Release date"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Album cover image file"
+                  },
+                  "genre": {
+                    "type": "string"
+                  },
+                  "isExplicit": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Album created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Album"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Admin access required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/albums/{id}/add-songs": {
+      "delete": {
+        "summary": "Add songs to album (Admin only)",
+        "description": "Add songs to an existing album",
+        "tags": [
+          "Albums"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Album ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "songIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Array of song IDs to add"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Songs added to album successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Album"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Admin access required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Album not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/albums/{id}": {
+      "get": {
+        "summary": "Get album by ID",
+        "description": "Retrieve detailed information about a specific album",
+        "tags": [
+          "Albums"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Album ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Album retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Album"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Album not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Update album (Admin only)",
+        "description": "Update an existing album's information",
+        "tags": [
+          "Albums"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Album ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "artist": {
+                    "type": "string"
+                  },
+                  "releaseDate": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Album cover image file"
+                  },
+                  "genre": {
+                    "type": "string"
+                  },
+                  "isExplicit": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Album updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Album"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Admin access required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Album not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an album (Admin only)",
+        "description": "Delete an album from the database",
+        "tags": [
+          "Albums"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Album ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Album deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Admin access required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Album not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/artists": {
+      "get": {
+        "summary": "Get all artists",
+        "description": "Retrieve a list of all artists",
+        "tags": [
+          "Artists"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of artists retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Artist"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/artists/top": {
+      "get": {
+        "summary": "Get top artists",
+        "description": "Retrieve a list of the most followed artists",
+        "tags": [
+          "Artists"
+        ],
+        "responses": {
+          "200": {
+            "description": "Top artists retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Artist"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/artists/{id}/top-songs": {
+      "get": {
+        "summary": "Get artist's top songs",
+        "description": "Retrieve the most popular songs by a specific artist",
+        "tags": [
+          "Artists"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Artist ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Artist's top songs retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Song"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Artist not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/artists/{id}": {
+      "get": {
+        "summary": "Get artist by ID",
+        "description": "Retrieve detailed information about a specific artist",
+        "tags": [
+          "Artists"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Artist ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Artist retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Artist"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Artist not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update artist details",
+        "description": "Update an existing artist's information",
+        "tags": [
+          "Artists"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Artist ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "bio": {
+                    "type": "string"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Artist image file"
+                  },
+                  "genres": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "isVerified": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Artist updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Artist"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Artist not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an artist (Admin only)",
+        "description": "Delete an artist from the database",
+        "tags": [
+          "Artists"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Artist ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Artist deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Admin access required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Artist not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/artists/create": {
+      "post": {
+        "summary": "Create a new artist (Admin only)",
+        "description": "Create a new artist profile with name, bio, and optional image",
+        "tags": [
+          "Artists"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "bio"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Artist name"
+                  },
+                  "bio": {
+                    "type": "string",
+                    "description": "Artist biography"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Artist image file"
+                  },
+                  "genres": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "isVerified": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Artist created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Artist"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Admin access required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/songs": {
+      "get": {
+        "summary": "Get all songs",
+        "description": "Retrieve a list of all songs",
+        "tags": [
+          "Songs"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of songs retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Song"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/songs/create": {
+      "post": {
+        "summary": "Create a new song (Admin only)",
+        "description": "Create a new song with audio file and optional cover image",
+        "tags": [
+          "Songs"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "title",
+                  "artist",
+                  "duration",
+                  "audio"
+                ],
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Song title"
+                  },
+                  "artist": {
+                    "type": "string",
+                    "description": "Artist ID"
+                  },
+                  "album": {
+                    "type": "string",
+                    "description": "Album ID"
+                  },
+                  "duration": {
+                    "type": "number",
+                    "description": "Duration in seconds"
+                  },
+                  "audio": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Audio file"
+                  },
+                  "coverImage": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Cover image file"
+                  },
+                  "genre": {
+                    "type": "string"
+                  },
+                  "isExplicit": {
+                    "type": "boolean"
+                  },
+                  "featuredArtists": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Array of featured artist IDs"
+                  },
+                  "releaseDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Song created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Song"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Admin access required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/songs/{id}": {
+      "get": {
+        "summary": "Get song by ID",
+        "description": "Retrieve detailed information about a specific song",
+        "tags": [
+          "Songs"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Song ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Song retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Song"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Song not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update song details (Admin only)",
+        "description": "Update an existing song's information",
+        "tags": [
+          "Songs"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Song ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "artist": {
+                    "type": "string"
+                  },
+                  "album": {
+                    "type": "string"
+                  },
+                  "genre": {
+                    "type": "string"
+                  },
+                  "isExplicit": {
+                    "type": "boolean"
+                  },
+                  "featuredArtists": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Song updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Song"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Admin access required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Song not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a song (Admin only)",
+        "description": "Delete a song from the database",
+        "tags": [
+          "Songs"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Song ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Song deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Admin access required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Song not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/songs/{id}/add-album": {
+      "post": {
+        "summary": "Add album to song (Admin only)",
+        "description": "Associate an album with a song",
+        "tags": [
+          "Songs"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Song ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "albumId"
+                ],
+                "properties": {
+                  "albumId": {
+                    "type": "string",
+                    "description": "Album ID to add"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Album added to song successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Song"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Admin access required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Song or album not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/songs/{id}/add-artist": {
+      "post": {
+        "summary": "Add artist to song (Admin only)",
+        "description": "Associate an artist with a song",
+        "tags": [
+          "Songs"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Song ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "artistId"
+                ],
+                "properties": {
+                  "artistId": {
+                    "type": "string",
+                    "description": "Artist ID to add"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Artist added to song successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Song"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Admin access required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Song or artist not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/register": {
+      "post": {
+        "summary": "Register a new user",
+        "description": "Create a new user account with name, email, and password",
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              },
+              "example": {
+                "name": "John Doe",
+                "email": "john@example.com",
+                "password": "password123",
+                "isAdmin": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User already exists or validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/login": {
+      "post": {
+        "summary": "Login user",
+        "description": "Authenticate user with email and password, returns JWT token",
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              },
+              "example": {
+                "email": "john@example.com",
+                "password": "password123"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User successfully authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "description": "JWT authentication token"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "isAdmin": {
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid credentials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/profile": {
+      "get": {
+        "summary": "Get user profile",
+        "description": "Get the authenticated user's profile information",
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update user profile",
+        "description": "Update the authenticated user's profile information (admin only)",
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "profilePicture": {
+                    "type": "string"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Profile image file"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User profile updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Admin access required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": []
+}
