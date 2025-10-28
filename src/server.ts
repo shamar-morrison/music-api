@@ -26,8 +26,11 @@ app.use(express.urlencoded({ extended: true }));
 // Rate limit
 app.use(limiter);
 
-// Swagger UI
+// Swagger UI - served from /api-docs
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Serve static files (Swagger UI standalone)
+app.use(express.static("public"));
 
 // connect to database
 mongoose
