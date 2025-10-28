@@ -5,7 +5,3 @@ uploads
 .git
 dist
 *.map
-
-# Keep public folder for static files
-# public/
-
