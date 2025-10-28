@@ -3,5 +3,5 @@ src
 uploads
 .env*
 .git
-dist
 *.map
+# Note: dist/ and public/ are needed for deployment

@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
-    "build": "tsc && tsc-alias && npm run build:swagger",
+    "build": "tsc && tsc-alias && npm run build:swagger && npm run copy:public",
     "build:swagger": "tsx src/scripts/generate-swagger-json.ts",
+    "copy:public": "cp -r public dist/",
     "vercel-build": "npm run build",
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",

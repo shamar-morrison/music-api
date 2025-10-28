@@ -8,6 +8,8 @@ import express, {
 } from "express";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
+import path from "path";
+import { fileURLToPath } from "url";
 import swaggerUi from "swagger-ui-express";
 import { albumRouter } from "routes/album.routes";
 import { artistRouter } from "routes/artist.routes";
@@ -15,6 +17,9 @@ import { songsRouter } from "routes/songs.routes";
 import { userRouter } from "routes/user.routes.js";
 import { swaggerSpec } from "./config/swagger.js";
 import { limiter } from "utils/rate-limiter";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 const app = express();
@@ -30,11 +35,12 @@ app.use(limiter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Serve static files (Swagger UI standalone) - root path
-app.use(express.static("public"));
+const publicPath = path.join(__dirname, "public");
+app.use(express.static(publicPath));
 
 // Serve index.html for root path
 app.get("/", (_req: Request, res: Response) => {
-  res.sendFile("index.html", { root: "public" });
+  res.sendFile(path.join(publicPath, "index.html"));
 });
 
 // connect to database

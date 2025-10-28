@@ -14,6 +14,10 @@ const options: swaggerJsdoc.Options = {
     },
     servers: [
       {
+        url: "https://music-api-qxuc.vercel.app",
+        description: "Production server",
+      },
+      {
         url: `http://localhost:${process.env.PORT || 5000}`,
         description: "Development server",
       },
