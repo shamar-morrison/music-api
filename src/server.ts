@@ -35,7 +35,10 @@ app.use(limiter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Serve static files (Swagger UI standalone) - root path
-const publicPath = path.join(__dirname, "public");
+// In Vercel serverless, __dirname will be in .vercel/output, so we need to go up to find public
+const publicPath = process.env.VERCEL
+  ? path.join(process.cwd(), "public")
+  : path.join(__dirname, "public");
 app.use(express.static(publicPath));
 
 // Serve index.html for root path
@@ -74,6 +77,13 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     .json({ message: err.message || "Not Found", status: "error" });
 });
 
-app.listen(process.env.PORT || 5000, () => {
-  console.log(`Server is running on port ${process.env.PORT || 5000}`);
-});
+// Export app for Vercel serverless
+export default app;
+
+// Only listen when running locally (not in Vercel)
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}

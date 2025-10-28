@@ -20,6 +20,9 @@
   "author": "Shamar Morrison",
   "license": "ISC",
   "type": "module",
+  "engines": {
+    "node": "20.x"
+  },
   "dependencies": {
     "@typegoose/typegoose": "^12.20.0",
     "bcrypt": "^6.0.0",
