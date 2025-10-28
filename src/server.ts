@@ -29,8 +29,13 @@ app.use(limiter);
 // Swagger UI - served from /api-docs
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Serve static files (Swagger UI standalone)
+// Serve static files (Swagger UI standalone) - root path
 app.use(express.static("public"));
+
+// Serve index.html for root path
+app.get("/", (_req: Request, res: Response) => {
+  res.sendFile("index.html", { root: "public" });
+});
 
 // connect to database
 mongoose

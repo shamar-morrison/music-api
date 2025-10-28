@@ -6,3 +6,6 @@ uploads
 dist
 *.map
 
+# Keep public folder for static files
+# public/
+

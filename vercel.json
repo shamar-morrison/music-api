@@ -12,12 +12,8 @@
       "dest": "src/server.ts"
     },
     {
-      "src": "/api-docs/(.*)",
-      "dest": "src/server.ts"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/public/$1"
+      "dest": "src/server.ts"
     }
   ]
 }
