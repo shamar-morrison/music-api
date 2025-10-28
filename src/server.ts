@@ -9,14 +9,15 @@ import express, {
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
 import path from "path";
-import { fileURLToPath } from "url";
-import swaggerUi from "swagger-ui-express";
 import { albumRouter } from "routes/album.routes";
 import { artistRouter } from "routes/artist.routes";
 import { songsRouter } from "routes/songs.routes";
 import { userRouter } from "routes/user.routes.js";
-import { swaggerSpec } from "./config/swagger.js";
+import swaggerUi from "swagger-ui-express";
+import { fileURLToPath } from "url";
 import { limiter } from "utils/rate-limiter";
+
+import { swaggerSpec } from "./config/swagger.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
