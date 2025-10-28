@@ -8,6 +8,7 @@
     "start": "node dist/server.js",
     "build": "tsc && tsc-alias && npm run build:swagger",
     "build:swagger": "tsx src/scripts/generate-swagger-json.ts",
+    "vercel-build": "npm run build",
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "format": "prettier --write .",
