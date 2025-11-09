@@ -2,7 +2,8 @@ import type { NextFunction, Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
-import { UserModel } from "models/user.model";
+
+import { UserModel } from "../models/user.model";
 
 type JwtPayload = {
   id: string;

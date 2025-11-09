@@ -8,15 +8,15 @@ import express, {
 } from "express";
 import { StatusCodes } from "http-status-codes";
 import path from "path";
-import { albumRouter } from "routes/album.routes";
-import { artistRouter } from "routes/artist.routes";
-import { songsRouter } from "routes/songs.routes";
-import { userRouter } from "routes/user.routes.js";
 import swaggerUi from "swagger-ui-express";
 import { fileURLToPath } from "url";
-import { limiter } from "utils/rate-limiter";
 
 import { swaggerSpec } from "./config/swagger.js";
+import { albumRouter } from "./routes/album.routes";
+import { artistRouter } from "./routes/artist.routes";
+import { songsRouter } from "./routes/songs.routes";
+import { userRouter } from "./routes/user.routes.js";
+import { limiter } from "./utils/rate-limiter";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

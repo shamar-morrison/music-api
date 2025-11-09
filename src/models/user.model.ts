@@ -54,7 +54,7 @@ export class User {
   @prop({ default: false, type: () => Boolean })
   isAdmin!: boolean;
 
-  @prop({ ref: "Song", type: () => String })
+  @prop({ ref: "Song", type: () => [String] })
   likedSongs!: Ref<Song>[];
 
   @prop({ ref: "Album", type: () => String })
