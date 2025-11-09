@@ -73,17 +73,22 @@ export default app;
 // Only listen when running locally (not in Vercel)
 if (process.env.NODE_ENV !== "production") {
   // Import connectDB dynamically to avoid issues in serverless
-  import("./config/database.js").then(({ connectDB }) => {
-    connectDB()
-      .then(() => {
-        const PORT = process.env.PORT || 5000;
-        app.listen(PORT, () => {
-          console.log(`Server is running on port ${PORT}`);
+  import("./config/database.js")
+    .then(({ connectDB }) => {
+      connectDB()
+        .then(() => {
+          const PORT = process.env.PORT || 5000;
+          app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+          });
+        })
+        .catch((error) => {
+          console.error("Failed to connect to database:", error);
+          process.exit(1);
         });
-      })
-      .catch((error) => {
-        console.error("Failed to connect to database:", error);
-        process.exit(1);
-      });
-  });
+    })
+    .catch((error) => {
+      console.error("Failed to load database module:", error);
+      process.exit(1);
+    });
 }
