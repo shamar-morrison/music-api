@@ -7,7 +7,6 @@ import express, {
   type Response,
 } from "express";
 import { StatusCodes } from "http-status-codes";
-import mongoose from "mongoose";
 import path from "path";
 import { albumRouter } from "routes/album.routes";
 import { artistRouter } from "routes/artist.routes";
@@ -47,16 +46,6 @@ app.get("/", (_req: Request, res: Response) => {
   res.sendFile(path.join(publicPath, "index.html"));
 });
 
-// connect to database
-mongoose
-  .connect(process.env.MONGODB_URI as string)
-  .then(() => {
-    console.log("Connected to mongoDB database");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-
 // Routes
 app.use("/api/users", userRouter);
 app.use("/api/artists", artistRouter);
@@ -83,8 +72,23 @@ export default app;
 
 // Only listen when running locally (not in Vercel)
 if (process.env.NODE_ENV !== "production") {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
+  // Import connectDB dynamically to avoid issues in serverless
+  import("./config/database.js")
+    .then(({ connectDB }) => {
+      connectDB()
+        .then(() => {
+          const PORT = process.env.PORT || 5000;
+          app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+          });
+        })
+        .catch((error) => {
+          console.error("Failed to connect to database:", error);
+          process.exit(1);
+        });
+    })
+    .catch((error) => {
+      console.error("Failed to load database module:", error);
+      process.exit(1);
+    });
 }
