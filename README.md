@@ -84,18 +84,30 @@ Create a `.env` file in the root directory with the following variables:
 # Server Configuration
 PORT=5000
 
-# MongoDB Configuration
-MONGODB_URI=mongodb://localhost:27017/music-api
-# OR for MongoDB Atlas:
-# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/music-api
+# API Base URL
+# For production (Railway/Render): Set this to your deployed URL
+# API_BASE_URL=https://your-app.railway.app
+# API_BASE_URL=https://your-app.onrender.com
+# For development: Leave blank or use http://localhost:5000
 
-# JWT Secret
-JWT_SECRET=your_super_secret_jwt_key_here
+# Database Configuration
+# For MongoDB Atlas (cloud):
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/music-api?retryWrites=true&w=majority
 
-# Cloudinary Configuration
+# For MongoDB with authentication:
+# MONGODB_URI=mongodb://username:password@localhost:27017/music-api
+
+# For MongoDB with custom port:
+# MONGODB_URI=mongodb://localhost:27018/music-api
+
+# JWT Configuration
+JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
+
+# Cloudinary Configuration (for file uploads)
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
+
 ```
 
 ### 4. Run the application
