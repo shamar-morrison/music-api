@@ -4,8 +4,8 @@ services:
     runtime: node
     region: oregon # Change to your preferred region
     plan: free # Options: free, starter, standard, pro
-    buildCommand: npm install && npm run build
-    startCommand: npm start
+    buildCommand: npm ci && npm run build
+    startCommand: node dist/server.js
     envVars:
       - key: NODE_ENV
         value: production
