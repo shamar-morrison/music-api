@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: music-api
+    runtime: node
+    region: oregon # Change to your preferred region
+    plan: free # Options: free, starter, standard, pro
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: API_BASE_URL
+        sync: false # Set this in Render dashboard to your app URL (e.g., https://music-api-xxx.onrender.com)
+      - key: MONGODB_URI
+        sync: false # Add this secret in Render dashboard
+      - key: JWT_SECRET
+        sync: false # Add this secret in Render dashboard
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false # Add this in Render dashboard
+      - key: CLOUDINARY_API_KEY
+        sync: false # Add this in Render dashboard
+      - key: CLOUDINARY_API_SECRET
+        sync: false # Add this secret in Render dashboard
+    healthCheckPath: /api-docs
+    autoDeploy: true

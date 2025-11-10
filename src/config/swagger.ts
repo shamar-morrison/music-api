@@ -14,12 +14,8 @@ const options: swaggerJsdoc.Options = {
     },
     servers: [
       {
-        url: "https://music-api-five-omega.vercel.app",
-        description: "Production server",
-      },
-      {
-        url: `http://localhost:${process.env.PORT || 5000}`,
-        description: "Development server",
+        url: process.env.API_BASE_URL || "http://localhost:5000",
+        description: process.env.NODE_ENV === "production" ? "Production server" : "Development server",
       },
     ],
     components: {

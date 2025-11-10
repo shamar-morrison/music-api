@@ -35,10 +35,7 @@ app.use(limiter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Serve static files (Swagger UI standalone) - root path
-// In Vercel serverless, __dirname will be in .vercel/output, so we need to go up to find public
-const publicPath = process.env.VERCEL
-  ? path.join(process.cwd(), "public")
-  : path.join(__dirname, "public");
+const publicPath = path.join(__dirname, "public");
 app.use(express.static(publicPath));
 
 // Serve index.html for root path
@@ -67,12 +64,15 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     .json({ message: err.message || "Not Found", status: "error" });
 });
 
-// Export app for Vercel serverless
+// Export app for testing or serverless environments
 export default app;
 
-// Only listen when running locally (not in Vercel)
-if (process.env.NODE_ENV !== "production") {
-  // Import connectDB dynamically to avoid issues in serverless
+// Start server when this file is run directly (not imported)
+// This check ensures the server starts on Railway/Render but can still be imported for testing
+const isMainModule = process.argv[1] === fileURLToPath(import.meta.url);
+
+if (isMainModule) {
+  // Import connectDB to establish database connection
   import("./config/database.js")
     .then(({ connectDB }) => {
       connectDB()
@@ -80,6 +80,7 @@ if (process.env.NODE_ENV !== "production") {
           const PORT = process.env.PORT || 5000;
           app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
+            console.log(`Swagger UI available at http://localhost:${PORT}/api-docs`);
           });
         })
         .catch((error) => {
