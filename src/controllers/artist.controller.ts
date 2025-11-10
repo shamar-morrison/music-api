@@ -1,10 +1,10 @@
 import type { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import { StatusCodes } from "http-status-codes";
-import { AlbumModel } from "models/album.model.js";
-import { ArtistModel } from "models/artist.model";
-import { SongModel } from "models/song.model.js";
-import { uploadToCloudinary } from "utils/cloudinary-upload";
+import { AlbumModel } from "@/models/album.model.js";
+import { ArtistModel } from "@/models/artist.model.js";
+import { SongModel } from "@/models/song.model.js";
+import { uploadToCloudinary } from "@/utils/cloudinary-upload.js";
 
 import type {
   CreateArtistData,

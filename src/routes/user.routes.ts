@@ -3,10 +3,10 @@ import {
   getUserProfile,
   loginUser,
   updateUserProfile,
-} from "controllers/user.controller.js";
+} from "@/controllers/user.controller.js";
 import { Router } from "express";
-import { isAdmin, protect } from "middlewares/auth.middleware";
-import { upload } from "middlewares/upload";
+import { isAdmin, protect } from "@/middlewares/auth.middleware.js";
+import { upload } from "@/middlewares/upload.js";
 
 export const userRouter = Router();
 

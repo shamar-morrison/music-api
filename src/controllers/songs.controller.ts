@@ -1,17 +1,17 @@
 import type { Request } from "express";
 import asyncHandler from "express-async-handler";
 import { StatusCodes } from "http-status-codes";
-import { AlbumModel } from "models/album.model";
-import { ArtistModel } from "models/artist.model";
-import { SongModel } from "models/song.model";
+import { AlbumModel } from "@/models/album.model.js";
+import { ArtistModel } from "@/models/artist.model.js";
+import { SongModel } from "@/models/song.model.js";
 import type {
   AddAlbumToSongData,
   AddArtistToSongData,
   CreateSongData,
   UpdateSongData,
-} from "types/song.types";
-import { uploadToCloudinary } from "utils/cloudinary-upload";
-import { validateRequiredFieldsWithFiles } from "utils/validation";
+} from "@/types/song.types.js";
+import { uploadToCloudinary } from "@/utils/cloudinary-upload.js";
+import { validateRequiredFieldsWithFiles } from "@/utils/validation.js";
 
 const AUDIO_PATH = "music-api/songs";
 /**

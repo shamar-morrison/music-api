@@ -12,11 +12,11 @@ import swaggerUi from "swagger-ui-express";
 import { fileURLToPath } from "url";
 
 import { swaggerSpec } from "./config/swagger.js";
-import { albumRouter } from "./routes/album.routes";
-import { artistRouter } from "./routes/artist.routes";
-import { songsRouter } from "./routes/songs.routes";
+import { albumRouter } from "./routes/album.routes.js";
+import { artistRouter } from "./routes/artist.routes.js";
+import { songsRouter } from "./routes/songs.routes.js";
 import { userRouter } from "./routes/user.routes.js";
-import { limiter } from "./utils/rate-limiter";
+import { limiter } from "./utils/rate-limiter.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

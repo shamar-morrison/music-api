@@ -4,8 +4,8 @@ import {
   prop,
   type Ref,
 } from "@typegoose/typegoose";
-import type { Album } from "models/album.model.js";
-import type { Song } from "models/song.model.js";
+import type { Album } from "./album.model.js";
+import type { Song } from "./song.model.js";
 
 @modelOptions({ schemaOptions: { timestamps: true } })
 export class Artist {

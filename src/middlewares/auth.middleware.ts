@@ -3,7 +3,7 @@ import asyncHandler from "express-async-handler";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 
-import { UserModel } from "../models/user.model";
+import { UserModel } from "../models/user.model.js";
 
 type JwtPayload = {
   id: string;

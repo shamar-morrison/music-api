@@ -2,11 +2,11 @@ import type { Ref } from "@typegoose/typegoose";
 import type { Request } from "express";
 import asyncHandler from "express-async-handler";
 import { StatusCodes } from "http-status-codes";
-import { Album, AlbumModel } from "models/album.model";
-import { Song, SongModel } from "models/song.model";
-import type { createAlbumData } from "types/album.types";
-import { uploadToCloudinary } from "utils/cloudinary-upload";
-import { validateRequiredFields } from "utils/validation";
+import { Album, AlbumModel } from "@/models/album.model.js";
+import { Song, SongModel } from "@/models/song.model.js";
+import type { createAlbumData } from "@/types/album.types.js";
+import { uploadToCloudinary } from "@/utils/cloudinary-upload.js";
+import { validateRequiredFields } from "@/utils/validation.js";
 
 const IMAGE_PATH = "music-api/albums";
 

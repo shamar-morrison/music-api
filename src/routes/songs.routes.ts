@@ -6,10 +6,10 @@ import {
   getAllSongs,
   getSongById,
   updateSongDetails,
-} from "controllers/songs.controller";
+} from "@/controllers/songs.controller.js";
 import { Router } from "express";
-import { isAdmin, protect } from "middlewares/auth.middleware";
-import { upload } from "middlewares/upload";
+import { isAdmin, protect } from "@/middlewares/auth.middleware.js";
+import { upload } from "@/middlewares/upload.js";
 
 export const songsRouter = Router();
 
