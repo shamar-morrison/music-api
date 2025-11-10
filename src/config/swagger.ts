@@ -6,8 +6,34 @@ const options: swaggerJsdoc.Options = {
     info: {
       title: "Music API",
       version: "1.0.0",
-      description:
-        "A RESTful API for a music streaming service, built with Node.js, Express, MongoDB and Cloudinary",
+      description: `A RESTful API for a music streaming service, built with Node.js, Express, MongoDB and Cloudinary.
+
+## 🚀 Try the API Now!
+
+Test the API instantly with our demo account (no registration required):
+
+**Demo Credentials:**
+- **Email:** \`demo@musicapi.com\`
+- **Password:** \`demo123456\`
+
+**How to Use:**
+1. Call \`POST /api/users/login\` with the demo credentials
+2. Copy the \`token\` from the response
+3. Click the **"Authorize" 🔓** button above
+4. Enter: \`Bearer <your-token>\`
+5. Test any endpoint!
+
+**Note:** This is a shared demo account. Data may be modified by other users. For a personal account with full control, register at \`POST /api/users/register\`.
+
+## Authentication
+
+This API uses **JWT Bearer token** authentication. Include your token in the Authorization header:
+
+\`\`\`
+Authorization: Bearer <your-token>
+\`\`\`
+
+Protected endpoints require authentication. Admin endpoints require admin privileges.`,
       contact: {
         name: "Music API Support",
       },
