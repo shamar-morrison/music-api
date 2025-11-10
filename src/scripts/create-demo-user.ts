@@ -2,7 +2,7 @@ import "reflect-metadata";
 
 import dotenv from "dotenv";
 
-import { connectDB } from "../config/database.js";
+import { connectDB, disconnectDB } from "../config/database.js";
 import { UserModel } from "../models/user.model.js";
 
 dotenv.config();
@@ -12,6 +12,8 @@ dotenv.config();
  * Run this once in production to seed the demo account
  */
 async function createDemoUser() {
+  let exitCode = 0;
+
   try {
     console.log("Connecting to database...");
     await connectDB();
@@ -23,7 +25,7 @@ async function createDemoUser() {
 
     if (existingDemoUser) {
       console.log("✅ Demo user already exists!");
-      process.exit(0);
+      return;
     }
 
     // Create demo user
@@ -35,11 +37,13 @@ async function createDemoUser() {
     });
 
     console.log("✅ Demo user created successfully!");
-
-    process.exit(0);
   } catch (error) {
     console.error("❌ Error creating demo user:", error);
-    process.exit(1);
+    exitCode = 1;
+  } finally {
+    // Always close the database connection before exiting
+    await disconnectDB();
+    process.exit(exitCode);
   }
 }
 
