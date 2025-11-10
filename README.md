@@ -610,24 +610,6 @@ This project uses strict TypeScript with:
 
 ---
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
----
-
-## License
-
-ISC License
-
----
-
-## Author
-
-**Shamar Morrison**
-
----
-
 <!--
 ## Future Enhancements
 
