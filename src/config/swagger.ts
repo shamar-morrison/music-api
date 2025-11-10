@@ -14,8 +14,12 @@ const options: swaggerJsdoc.Options = {
     },
     servers: [
       {
-        url: process.env.API_BASE_URL || "http://localhost:5000",
-        description: process.env.NODE_ENV === "production" ? "Production server" : "Development server",
+        url: process.env.API_BASE_URL || "https://your-app.onrender.com",
+        description: "Production server",
+      },
+      {
+        url: "http://localhost:5000",
+        description: "Development server",
       },
     ],
     components: {
