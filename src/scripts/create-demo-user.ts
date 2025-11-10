@@ -1,5 +1,7 @@
 import "reflect-metadata";
+
 import dotenv from "dotenv";
+
 import { connectDB } from "../config/database.js";
 import { UserModel } from "../models/user.model.js";
 
@@ -21,14 +23,11 @@ async function createDemoUser() {
 
     if (existingDemoUser) {
       console.log("✅ Demo user already exists!");
-      console.log("Email: demo@musicapi.com");
-      console.log("Password: demo123456");
       process.exit(0);
     }
 
     // Create demo user
-    console.log("Creating demo user...");
-    const demoUser = await UserModel.create({
+    await UserModel.create({
       name: "Demo User",
       email: "demo@musicapi.com",
       password: "demo123456",
@@ -36,15 +35,6 @@ async function createDemoUser() {
     });
 
     console.log("✅ Demo user created successfully!");
-    console.log("\nDemo Credentials:");
-    console.log("==================");
-    console.log("Email: demo@musicapi.com");
-    console.log("Password: demo123456");
-    console.log("User ID:", demoUser._id);
-    console.log("\nUsers can now test the API with these credentials.");
-    console.log(
-      "Add these credentials to your Swagger documentation for easy access.",
-    );
 
     process.exit(0);
   } catch (error) {
